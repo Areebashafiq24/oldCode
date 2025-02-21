@@ -42,7 +42,7 @@ export default function Success() {
                         href="/"
                         className="inline-block bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors duration-200"
                     >
-                        Return Home
+                        Home
                     </a>
                 </motion.div>
             </motion.div>
