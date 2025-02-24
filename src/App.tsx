@@ -3,9 +3,9 @@ import { Navigate, Route, Routes, useRoutes } from "react-router-dom";
 import routes from "tempo-routes";
 import LoginForm from "./components/auth/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm";
-import Home from "./components/home";
-import LandingPage from "./components/landing/LandingPage";
-import Success from "./components/success";
+import Dashboard from "./components/pages/dashboard";
+import Success from "./components/pages/success";
+import Home from "./components/pages/home";
 import { AuthProvider, useAuth } from "../supabase/auth";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -26,14 +26,14 @@ function AppRoutes() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignUpForm />} />
         <Route
           path="/dashboard"
           element={
             <PrivateRoute>
-              <Home />
+              <Dashboard />
             </PrivateRoute>
           }
         />

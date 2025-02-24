@@ -1,9 +1,9 @@
 import React from "react";
-import TopNavigation from "./layout/TopNavigation";
-import Sidebar from "./layout/Sidebar";
-import DashboardGrid from "./dashboard/DashboardGrid";
-import TaskBoard from "./tasks/TaskBoard";
-import ActivityFeed from "./activity/ActivityFeed";
+import TopNavigation from "../dashboard/layout/TopNavigation";
+import Sidebar from "../dashboard/layout/Sidebar";
+import DashboardGrid from "../dashboard/DashboardGrid";
+import TaskBoard from "../dashboard/TaskBoard";
+import ActivityFeed from "../dashboard/ActivityFeed";
 
 const Home = () => {
   return (

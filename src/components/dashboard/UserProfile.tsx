@@ -1,4 +1,4 @@
-import { useAuth } from "../../supabase/auth"
+import { useAuth } from "../../../supabase/auth"
 
 export function UserProfile() {
   const { user, loading } = useAuth()

@@ -87,7 +87,7 @@ const ActivityFeed = ({
   activities = defaultActivities,
 }: ActivityFeedProps) => {
   return (
-    <Card className="w-full h-full bg-white dark:bg-gray-800">
+    <Card className="w-full border-none h-full bg-white dark:bg-gray-800">
       <div className="p-4 border-b">
         <h2 className="text-lg font-semibold">Activity Feed</h2>
       </div>

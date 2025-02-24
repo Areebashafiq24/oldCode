@@ -1,5 +1,5 @@
 import React from "react";
-import { Bell, Search, Settings, User } from "lucide-react";
+import { Bell, Home, Search, Settings, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,7 +17,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "../../../supabase/auth";
+import { useAuth } from "../../../../supabase/auth";
+import { Link } from "react-router-dom";
 
 interface TopNavigationProps {
   onSearch?: (query: string) => void;
@@ -38,6 +39,9 @@ const TopNavigation = ({
   return (
     <div className="w-full h-16 border-b bg-background flex items-center justify-between px-4 fixed top-0 z-50">
       <div className="flex items-center gap-4 flex-1">
+        <Link to="/">
+          <Home />
+        </Link>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
