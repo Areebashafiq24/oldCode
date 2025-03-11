@@ -7,12 +7,14 @@ import Dashboard from "./components/pages/dashboard";
 import Success from "./components/pages/success";
 import Home from "./components/pages/home";
 import { AuthProvider, useAuth } from "../supabase/auth";
+import { Toaster } from "./components/ui/toaster";
+import { LoadingScreen, LoadingSpinner } from "./components/ui/loading-spinner";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen text="Authenticating..." />;
   }
 
   if (!user) {
@@ -52,9 +54,10 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<LoadingScreen text="Loading application..." />}>
         <AppRoutes />
       </Suspense>
+      <Toaster />
     </AuthProvider>
   );
 }
