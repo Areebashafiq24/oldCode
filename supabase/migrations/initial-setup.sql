@@ -6,8 +6,6 @@ CREATE TABLE IF NOT EXISTS public.users (
     avatar_url text,
     user_id text UNIQUE,
     token_identifier text NOT NULL,
-    subscription text,
-    credits text,
     image text,
     created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
     updated_at timestamp with time zone,
@@ -34,17 +32,6 @@ BEGIN
                 FOR SELECT USING (auth.uid()::text = user_id)';
     END IF;
 
-    -- Check if the policy for subscriptions exists
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_policies 
-        WHERE schemaname = 'public' 
-        AND tablename = 'subscriptions' 
-        AND policyname = 'Users can view own subscriptions'
-    ) THEN
-        -- Create policy for subscriptions
-        EXECUTE 'CREATE POLICY "Users can view own subscriptions" ON public.subscriptions
-                FOR SELECT USING (auth.uid()::text = user_id)';
-    END IF;
 END
 $$;
 
