@@ -8,30 +8,89 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronRight, Settings, User } from "lucide-react";
+import {
+  ChevronRight,
+  Settings,
+  User,
+  Sun,
+  Moon,
+  Mail,
+  Phone,
+  CheckCircle,
+  Building2,
+  Users,
+  Brain,
+  Star,
+  ArrowRight,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../supabase/auth";
+import { useTheme } from "../../App";
 
 export default function LandingPage() {
   const { user, signOut } = useAuth();
-
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white text-black">
-      {/* Apple-style navigation */}
-      <header className="fixed top-0 z-50 w-full bg-[rgba(255,255,255,0.8)] backdrop-blur-md border-b border-[#f5f5f7]/30">
-        <div className="max-w-[980px] mx-auto flex h-12 items-center justify-between px-4">
-          <div className="flex items-center">
-            <Link to="/" className="font-medium text-xl">
-              Tempo Starter Kit
+    <div
+      className={`min-h-screen ${isDark ? "leadmagic-gradient text-white" : "leadmagic-gradient-light text-black"}`}
+    >
+      {/* Navigation */}
+      <header
+        className={`fixed top-0 z-50 w-full ${isDark ? "bg-black/20" : "bg-white/20"} backdrop-blur-md border-b ${isDark ? "border-white/10" : "border-black/10"}`}
+      >
+        <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-6">
+          <div className="flex items-center gap-8">
+            <Link
+              to="/"
+              className={`font-bold text-xl ${isDark ? "text-white" : "text-gray-900"}`}
+            >
+              Lead Mend
             </Link>
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link
+                to="/"
+                className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}
+              >
+                Home
+              </Link>
+              <Link
+                to="/resources"
+                className={`text-sm font-medium ${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"} transition-colors`}
+              >
+                Resources
+              </Link>
+              <Link
+                to="/docs"
+                className={`text-sm font-medium ${isDark ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-gray-900"} transition-colors`}
+              >
+                Docs
+              </Link>
+            </nav>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className={`${isDark ? "text-gray-300 hover:text-white hover:bg-gray-800" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`}
+            >
+              {isDark ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </Button>
             {user ? (
               <div className="flex items-center gap-4">
                 <Link to="/dashboard">
-                  <Button variant="ghost" className="text-sm font-light hover:text-gray-500">Dashboard</Button>
+                  <Button
+                    variant="ghost"
+                    className={`text-sm font-medium ${isDark ? "text-gray-300 hover:text-white hover:bg-gray-800" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`}
+                  >
+                    Dashboard
+                  </Button>
                 </Link>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -45,8 +104,15 @@ export default function LandingPage() {
                       </AvatarFallback>
                     </Avatar>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="rounded-xl border-none shadow-lg">
-                    <DropdownMenuLabel className="text-xs text-gray-500">{user.email}</DropdownMenuLabel>
+                  <DropdownMenuContent
+                    align="end"
+                    className={`rounded-xl border-none shadow-lg ${isDark ? "bg-gray-800" : "bg-white"}`}
+                  >
+                    <DropdownMenuLabel
+                      className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      {user.email}
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
@@ -57,7 +123,10 @@ export default function LandingPage() {
                       Settings
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer" onSelect={() => signOut()}>
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onSelect={() => signOut()}
+                    >
                       Log out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -66,10 +135,17 @@ export default function LandingPage() {
             ) : (
               <>
                 <Link to="/login">
-                  <Button variant="ghost" className="text-sm font-light hover:text-gray-500">Sign In</Button>
+                  <Button
+                    variant="ghost"
+                    className={`text-sm font-medium ${isDark ? "text-gray-300 hover:text-white hover:bg-gray-800" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`}
+                  >
+                    Sign In
+                  </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="rounded-full bg-black text-white hover:bg-gray-800 text-sm px-4">Get Started</Button>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-6">
+                    Start Free Trial – 100 credits
+                  </Button>
                 </Link>
               </>
             )}
@@ -77,97 +153,635 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <main className="pt-12">
+      <main className="pt-16">
         {/* Hero section */}
-        <section className="py-20 text-center">
-          <h2 className="text-5xl font-semibold tracking-tight mb-1">Tempo Starter Kit</h2>
-          <h3 className="text-2xl font-medium text-gray-500 mb-4">A modern full-stack starter kit with React & Supabase.</h3>
-          <div className="flex justify-center space-x-6 text-xl text-blue-600">
-            <Link to="/" className="flex items-center hover:underline">Learn more <ChevronRight className="h-4 w-4" /></Link>
-            <Link to="/signup" className="flex items-center hover:underline">Get started <ChevronRight className="h-4 w-4" /></Link>
-          </div>
+        <section className="py-32 text-center">
+          <div className="max-w-6xl mx-auto px-6">
+            <h1
+              className={`text-7xl font-bold tracking-tight ${isDark ? "text-white" : "text-gray-900"} mb-6`}
+            >
+              Lead Mend
+            </h1>
+            <p
+              className={`text-2xl ${isDark ? "text-gray-300" : "text-gray-600"} mb-4 font-medium`}
+            >
+              Transform your prospecting data into customers
+            </p>
+            <p
+              className={`text-lg ${isDark ? "text-gray-400" : "text-gray-600"} mb-12 max-w-3xl mx-auto leading-relaxed`}
+            >
+              The most accurate email finder and lead enrichment platform for
+              sales teams. Find verified business emails, phone numbers, and
+              social profiles with our AI-powered enrichment platform.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+              <Link to="/signup">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all">
+                  Start Free Trial – Get 100 Credits
+                </Button>
+              </Link>
+              <Link to="/dashboard">
+                <Button
+                  variant="outline"
+                  className={`px-10 py-4 text-lg rounded-xl border-2 ${isDark ? "border-gray-600 text-gray-300 hover:bg-gray-800" : "border-gray-300 hover:bg-gray-50"} transition-all`}
+                >
+                  View Demo
+                </Button>
+              </Link>
+            </div>
 
+            {/* Trust badges */}
+            <div className="mb-16">
+              <p
+                className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} mb-6`}
+              >
+                Trusted by 10,000+ sales professionals
+              </p>
+              <div className="flex items-center justify-center gap-12 opacity-60">
+                <div
+                  className={`text-2xl font-bold ${isDark ? "text-gray-400" : "text-gray-400"}`}
+                >
+                  G2
+                </div>
+                <div className="flex items-center gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-5 w-5 fill-current ${isDark ? "text-yellow-400" : "text-yellow-500"}`}
+                    />
+                  ))}
+                  <span
+                    className={`ml-2 text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
+                  >
+                    4.8/5
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-8 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className={isDark ? "text-gray-300" : "text-gray-600"}>
+                  95% Email Accuracy
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span className={isDark ? "text-gray-300" : "text-gray-600"}>
+                  GDPR Compliant
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className={isDark ? "text-gray-300" : "text-gray-600"}>
+                  Real-time Verification
+                </span>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Features section */}
-        <section className="py-20 bg-[#f5f5f7] text-center">
-          <h2 className="text-5xl font-semibold tracking-tight mb-1">Powerful Features</h2>
-          <h3 className="text-2xl font-medium text-gray-500 mb-4">Everything you need to build modern web applications</h3>
-          <div className="flex justify-center space-x-6 text-xl text-blue-600">
-            <Link to="/" className="flex items-center hover:underline">Explore features <ChevronRight className="h-4 w-4" /></Link>
-            <Link to="/" className="flex items-center hover:underline">View documentation <ChevronRight className="h-4 w-4" /></Link>
-          </div>
-          <div className="mt-8 max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-8 rounded-2xl shadow-sm text-left">
-              <div className="h-12 w-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h4 className="text-xl font-medium mb-2">Lightning Fast</h4>
-              <p className="text-gray-500">Built with performance in mind for the best developer and user experience.</p>
+        <section className="py-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-20">
+              <h2
+                className={`text-5xl font-bold ${isDark ? "text-white" : "text-gray-900"} mb-6`}
+              >
+                Everything You Need to Find & Verify Contacts
+              </h2>
+              <p
+                className={`text-xl ${isDark ? "text-gray-300" : "text-gray-600"} max-w-4xl mx-auto`}
+              >
+                Our comprehensive suite of tools helps you find accurate contact
+                information, verify emails, and enrich your prospect data with
+                AI-powered insights.
+              </p>
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm text-left">
-              <div className="h-12 w-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                </svg>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div
+                className={`${isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} p-8 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 group`}
+              >
+                <div className="h-16 w-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Mail className="h-8 w-8 text-white" />
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-3`}
+                >
+                  Email Finder
+                </h3>
+                <p
+                  className={`${isDark ? "text-gray-300" : "text-gray-600"} mb-6`}
+                >
+                  Find anyone's professional email address using our advanced
+                  algorithms and multiple data sources.
+                </p>
+                <ul
+                  className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} space-y-3`}
+                >
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    95% accuracy rate
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Real-time verification
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Bulk processing
+                  </li>
+                </ul>
               </div>
-              <h4 className="text-xl font-medium mb-2">Modern Stack</h4>
-              <p className="text-gray-500">Uses React, Supabase, and other modern tools to build robust applications.</p>
-            </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm text-left">
-              <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
+
+              <div
+                className={`${isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} p-8 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 group`}
+              >
+                <div className="h-16 w-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Phone className="h-8 w-8 text-white" />
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-3`}
+                >
+                  Mobile Finder
+                </h3>
+                <p
+                  className={`${isDark ? "text-gray-300" : "text-gray-600"} mb-6`}
+                >
+                  Discover mobile phone numbers for your prospects with LinkedIn
+                  URL input and advanced matching.
+                </p>
+                <ul
+                  className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} space-y-3`}
+                >
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    LinkedIn integration
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Direct dial numbers
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Mobile verification
+                  </li>
+                </ul>
               </div>
-              <h4 className="text-xl font-medium mb-2">Beautiful UI</h4>
-              <p className="text-gray-500">Comes with a set of beautiful, responsive components ready to use.</p>
+
+              <div
+                className={`${isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} p-8 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 group`}
+              >
+                <div className="h-16 w-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <CheckCircle className="h-8 w-8 text-white" />
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-3`}
+                >
+                  Email Validation
+                </h3>
+                <p
+                  className={`${isDark ? "text-gray-300" : "text-gray-600"} mb-6`}
+                >
+                  Verify email addresses in real-time to maintain clean,
+                  deliverable lists and improve campaign performance.
+                </p>
+                <ul
+                  className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} space-y-3`}
+                >
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Real-time validation
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Bounce protection
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Deliverability scoring
+                  </li>
+                </ul>
+              </div>
+
+              <div
+                className={`${isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} p-8 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 group`}
+              >
+                <div className="h-16 w-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Building2 className="h-8 w-8 text-white" />
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-3`}
+                >
+                  Company Finder
+                </h3>
+                <p
+                  className={`${isDark ? "text-gray-300" : "text-gray-600"} mb-6`}
+                >
+                  Get comprehensive company data including revenue, employee
+                  count, technology stack, and funding information.
+                </p>
+                <ul
+                  className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} space-y-3`}
+                >
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Company profiles
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Technology stack
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Funding data
+                  </li>
+                </ul>
+              </div>
+
+              <div
+                className={`${isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} p-8 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 group`}
+              >
+                <div className="h-16 w-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Users className="h-8 w-8 text-white" />
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-3`}
+                >
+                  Profile Finder
+                </h3>
+                <p
+                  className={`${isDark ? "text-gray-300" : "text-gray-600"} mb-6`}
+                >
+                  Find LinkedIn profiles and professional information for your
+                  prospects with advanced matching algorithms.
+                </p>
+                <ul
+                  className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} space-y-3`}
+                >
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    LinkedIn profiles
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Professional data
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Social verification
+                  </li>
+                </ul>
+              </div>
+
+              <div
+                className={`${isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-100"} p-8 rounded-2xl shadow-lg border hover:shadow-xl transition-all duration-300 group`}
+              >
+                <div className="h-16 w-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Brain className="h-8 w-8 text-white" />
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-3`}
+                >
+                  AI Personalization
+                </h3>
+                <p
+                  className={`${isDark ? "text-gray-300" : "text-gray-600"} mb-6`}
+                >
+                  Generate personalized outreach messages and insights using
+                  GPT-4 powered AI technology.
+                </p>
+                <ul
+                  className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"} space-y-3`}
+                >
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    GPT-4 powered
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Custom templates
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    Smart insights
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Grid section for other features */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3">
-          <div className="bg-[#f5f5f7] rounded-3xl p-12 text-center">
-            <h2 className="text-4xl font-semibold tracking-tight mb-1">Authentication</h2>
-            <h3 className="text-xl font-medium text-gray-500 mb-4">Secure and easy to implement</h3>
-            <div className="flex justify-center space-x-6 text-lg text-blue-600">
-              <Link to="/" className="flex items-center hover:underline">Learn more <ChevronRight className="h-4 w-4" /></Link>
-              <Link to="/" className="flex items-center hover:underline">View example <ChevronRight className="h-4 w-4" /></Link>
+        {/* How it works section */}
+        <section className="py-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-20">
+              <h2
+                className={`text-5xl font-bold ${isDark ? "text-white" : "text-gray-900"} mb-6`}
+              >
+                How It Works
+              </h2>
+              <p
+                className={`text-xl ${isDark ? "text-gray-300" : "text-gray-600"} max-w-3xl mx-auto`}
+              >
+                Transform your prospecting workflow in three simple steps
+              </p>
             </div>
-            <div className="mt-4 bg-white p-6 rounded-xl shadow-sm max-w-sm mx-auto">
-              <div className="space-y-4">
-                <div className="h-10 bg-gray-100 rounded-md w-full"></div>
-                <div className="h-10 bg-gray-100 rounded-md w-full"></div>
-                <div className="h-10 bg-black rounded-md w-full"></div>
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="h-px bg-gray-300 flex-grow"></div>
-                  <span className="text-xs text-gray-500">OR</span>
-                  <div className="h-px bg-gray-300 flex-grow"></div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <div className="text-center">
+                <div
+                  className={`w-20 h-20 rounded-full ${isDark ? "bg-blue-900" : "bg-blue-100"} flex items-center justify-center mx-auto mb-6`}
+                >
+                  <span className="text-2xl font-bold text-blue-600">1</span>
                 </div>
-                <div className="h-10 bg-white border border-gray-300 rounded-md w-full"></div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-4`}
+                >
+                  Upload CSV
+                </h3>
+                <p className={`${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  Upload your prospect list with names, companies, or LinkedIn
+                  URLs. Our system supports various data formats.
+                </p>
+              </div>
+              <div className="text-center">
+                <div
+                  className={`w-20 h-20 rounded-full ${isDark ? "bg-green-900" : "bg-green-100"} flex items-center justify-center mx-auto mb-6`}
+                >
+                  <span className="text-2xl font-bold text-green-600">2</span>
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-4`}
+                >
+                  Enrich Real-time
+                </h3>
+                <p className={`${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  Our AI processes your data in real-time, finding emails, phone
+                  numbers, and enriching with professional insights.
+                </p>
+              </div>
+              <div className="text-center">
+                <div
+                  className={`w-20 h-20 rounded-full ${isDark ? "bg-purple-900" : "bg-purple-100"} flex items-center justify-center mx-auto mb-6`}
+                >
+                  <span className="text-2xl font-bold text-purple-600">3</span>
+                </div>
+                <h3
+                  className={`text-xl font-semibold ${isDark ? "text-white" : "text-gray-900"} mb-4`}
+                >
+                  Push to Outbound Tools
+                </h3>
+                <p className={`${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  Export enriched data or integrate directly with your CRM,
+                  email tools, and sales automation platforms.
+                </p>
               </div>
             </div>
           </div>
-          <div className="bg-[#f5f5f7] rounded-3xl p-12 text-center">
-            <h2 className="text-4xl font-semibold tracking-tight mb-1">Database</h2>
-            <h3 className="text-xl font-medium text-gray-500 mb-4">Powered by Supabase</h3>
-            <div className="flex justify-center space-x-6 text-lg text-blue-600">
-              <Link to="/" className="flex items-center hover:underline">Learn more <ChevronRight className="h-4 w-4" /></Link>
-              <Link to="/" className="flex items-center hover:underline">View docs <ChevronRight className="h-4 w-4" /></Link>
+        </section>
+
+        {/* Pricing section */}
+        <section className="py-24">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-20">
+              <h2
+                className={`text-5xl font-bold ${isDark ? "text-white" : "text-gray-900"} mb-6`}
+              >
+                Simple, Transparent Pricing
+              </h2>
+              <p
+                className={`text-xl ${isDark ? "text-gray-300" : "text-gray-600"}`}
+              >
+                Choose the plan that fits your needs. No hidden fees, cancel
+                anytime.
+              </p>
             </div>
-            <div className="mt-4 bg-gray-900 p-6 rounded-xl shadow-sm max-w-sm mx-auto text-left">
-              <pre className="text-green-400 text-xs font-mono overflow-x-auto">
-                <code>
-                  {`const { data, error } = await supabase
-  .from('posts')
-  .select('*')
-  .order('created_at', { ascending: false })
-`}
-                </code>
-              </pre>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div
+                className={`${isDark ? "glass-card-dark" : "bg-white/80"} p-8 rounded-2xl shadow-lg border ${isDark ? "border-white/20" : "border-gray-200"} backdrop-blur-sm`}
+              >
+                <div className="text-center mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Starter
+                  </h3>
+                  <div className="text-4xl font-bold text-gray-900 mb-1">
+                    $29
+                  </div>
+                  <div className="text-gray-500">per month</div>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">1,000 email credits</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">Email verification</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">Basic support</span>
+                  </li>
+                </ul>
+                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white rounded-xl py-3">
+                  Get Started
+                </Button>
+              </div>
+
+              <div
+                className={`${isDark ? "glass-card-dark" : "bg-white/80"} p-8 rounded-2xl shadow-xl border-2 border-blue-500 relative backdrop-blur-sm`}
+              >
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                    Most Popular
+                  </span>
+                </div>
+                <div className="text-center mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Professional
+                  </h3>
+                  <div className="text-4xl font-bold text-gray-900 mb-1">
+                    $99
+                  </div>
+                  <div className="text-gray-500">per month</div>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">5,000 email credits</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">Phone number finder</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">AI personalization</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">Priority support</span>
+                  </li>
+                </ul>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3">
+                  Get Started
+                </Button>
+              </div>
+
+              <div
+                className={`${isDark ? "glass-card-dark" : "bg-white/80"} p-8 rounded-2xl shadow-lg border ${isDark ? "border-white/20" : "border-gray-200"} backdrop-blur-sm`}
+              >
+                <div className="text-center mb-8">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Enterprise
+                  </h3>
+                  <div className="text-4xl font-bold text-gray-900 mb-1">
+                    Custom
+                  </div>
+                  <div className="text-gray-500">contact us</div>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">Unlimited credits</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">Custom integrations</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <svg
+                      className="h-5 w-5 text-green-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span className="text-gray-600">Dedicated support</span>
+                  </li>
+                </ul>
+                <Button className="w-full bg-gray-900 hover:bg-gray-800 text-white rounded-xl py-3">
+                  Contact Sales
+                </Button>
+              </div>
             </div>
           </div>
         </section>
@@ -178,44 +792,116 @@ export default function LandingPage() {
         <div className="max-w-[980px] mx-auto px-4">
           <div className="border-b border-gray-300 pb-8 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h4 className="font-medium text-sm text-gray-900 mb-4">Tempo Starter Kit</h4>
+              <h4 className="font-medium text-sm text-gray-900 mb-4">
+                Lead Mend
+              </h4>
               <ul className="space-y-2">
-                <li><Link to="/" className="hover:underline">Features</Link></li>
-                <li><Link to="/" className="hover:underline">Documentation</Link></li>
-                <li><Link to="/" className="hover:underline">Components</Link></li>
-                <li><Link to="/" className="hover:underline">Examples</Link></li>
+                <li>
+                  <Link to="/dashboard" className="hover:underline">
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    API Integration
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Pricing
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-sm text-gray-900 mb-4">Resources</h4>
+              <h4 className="font-medium text-sm text-gray-900 mb-4">
+                Enrichment
+              </h4>
               <ul className="space-y-2">
-                <li><Link to="/" className="hover:underline">Getting Started</Link></li>
-                <li><Link to="/" className="hover:underline">API Reference</Link></li>
-                <li><Link to="/" className="hover:underline">Tutorials</Link></li>
-                <li><Link to="/" className="hover:underline">Blog</Link></li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Company Data
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Person Intelligence
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    AI Personalization
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Email Verification
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-sm text-gray-900 mb-4">Community</h4>
+              <h4 className="font-medium text-sm text-gray-900 mb-4">
+                Integrations
+              </h4>
               <ul className="space-y-2">
-                <li><Link to="/" className="hover:underline">GitHub</Link></li>
-                <li><Link to="/" className="hover:underline">Discord</Link></li>
-                <li><Link to="/" className="hover:underline">Twitter</Link></li>
-                <li><Link to="/" className="hover:underline">YouTube</Link></li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Firecrawl API
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Serper.dev
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    GPT-4 Turbo
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Custom APIs
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-sm text-gray-900 mb-4">Legal</h4>
+              <h4 className="font-medium text-sm text-gray-900 mb-4">
+                Support
+              </h4>
               <ul className="space-y-2">
-                <li><Link to="/" className="hover:underline">Privacy</Link></li>
-                <li><Link to="/" className="hover:underline">Terms</Link></li>
-                <li><Link to="/" className="hover:underline">Cookie Policy</Link></li>
-                <li><Link to="/" className="hover:underline">Licenses</Link></li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Documentation
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    API Reference
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" className="hover:underline">
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
           <div className="py-4">
-            <p>Copyright © 2025 Tempo Labs. All rights reserved.</p>
+            <p>Copyright © 2025 Lead Mend. All rights reserved.</p>
           </div>
         </div>
       </footer>
