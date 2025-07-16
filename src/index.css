@@ -125,4 +125,19 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
+
+  /* Ensure navigation stays visible in dark mode */
+  .dark nav,
+  .dark .top-navigation {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Sticky navigation */
+  .top-navigation {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
 }

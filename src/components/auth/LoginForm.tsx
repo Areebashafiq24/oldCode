@@ -34,7 +34,7 @@ export default function LoginForm() {
 
     try {
       await signIn(email, password);
-      // Redirect immediately on successful login
+      // Redirect to dashboard on successful login
       navigate("/dashboard", { replace: true });
     } catch (error: any) {
       console.error("Login error:", error);
@@ -76,7 +76,7 @@ export default function LoginForm() {
             onClick={handleGoogleSignIn}
             disabled={isSubmitting}
             variant="outline"
-            className="w-full h-12 rounded-xl border-2 border-gray-200 hover:bg-gray-50 text-sm font-medium flex items-center justify-center gap-3 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`w-full h-12 rounded-xl border-2 ${isDark ? "border-gray-600 bg-gray-800 hover:bg-gray-700 text-white" : "border-gray-200 hover:bg-gray-50"} text-sm font-medium flex items-center justify-center gap-3 transition-all disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
