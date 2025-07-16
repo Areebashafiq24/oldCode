@@ -77,7 +77,7 @@ export default function SignUpForm() {
   return (
     <AuthLayout>
       <div
-        className={`${isDark ? "glass-card-dark" : "bg-white/90"} rounded-2xl shadow-xl border ${isDark ? "border-white/20" : "border-gray-100"} p-8 w-full max-w-md mx-auto backdrop-blur-sm`}
+        className={`${isDark ? "glass-card-dark" : "bg-white/90"} rounded-2xl shadow-xl border ${isDark ? "border-white/20" : "border-gray-100"} p-12 w-full max-w-lg mx-auto backdrop-blur-sm`}
       >
         <div className="space-y-6">
           <Button

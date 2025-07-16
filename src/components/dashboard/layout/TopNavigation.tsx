@@ -51,7 +51,7 @@ const TopNavigation = ({
     >
       <div className="flex items-center gap-4 flex-1">
         <Link
-          to="/"
+          to="/home"
           className={`${isDark ? "text-white hover:text-gray-300" : "text-gray-900 hover:text-gray-700"} transition-colors`}
         >
           <Home className="h-5 w-5" />

@@ -107,14 +107,8 @@ function AppRoutes() {
     <ThemeProvider>
       <AuthProvider>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Navigate to="/dashboard" replace />
-              </PrivateRoute>
-            }
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/docs" element={<Docs />} />
           <Route

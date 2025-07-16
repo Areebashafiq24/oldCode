@@ -129,9 +129,17 @@
   /* Ensure navigation stays visible in dark mode */
   .dark nav,
   .dark .top-navigation {
-    background: rgba(0, 0, 0, 0.8) !important;
-    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Fix dark mode navbar scrolling */
+  .leadmagic-gradient .top-navigation,
+  .leadmagic-gradient header {
+    background: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   }
 
   /* Sticky navigation */
