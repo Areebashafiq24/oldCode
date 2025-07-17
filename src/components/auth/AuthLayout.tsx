@@ -58,17 +58,24 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       </header>
 
       <div className="min-h-screen flex items-center justify-center pt-12">
-        <div className="max-w-md w-full px-4">
+        <div className="max-w-2xl w-full px-6">
           <div className="text-center mb-8">
             <h2
-              className={`text-4xl font-semibold tracking-tight ${isDark ? "text-white" : "text-gray-900"}`}
+              className={`text-5xl font-bold tracking-tight ${isDark ? "text-white" : "text-gray-900"}`}
             >
               Lead Mend
             </h2>
             <p
-              className={`text-xl font-medium ${isDark ? "text-gray-300" : "text-gray-600"} mt-2`}
+              className={`text-2xl font-medium ${isDark ? "text-gray-300" : "text-gray-600"} mt-4`}
             >
-              Find anyone's email in seconds
+              Transform your prospecting data into customers
+            </p>
+            <p
+              className={`text-lg ${isDark ? "text-gray-400" : "text-gray-500"} mt-2 max-w-2xl mx-auto`}
+            >
+              The most accurate email finder and lead enrichment platform for
+              sales teams. Find verified business emails, phone numbers, and
+              social profiles with our AI-powered enrichment platform.
             </p>
           </div>
           {children}

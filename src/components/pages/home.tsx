@@ -106,7 +106,7 @@ export default function LandingPage() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
-                    className={`rounded-xl border-none shadow-lg ${isDark ? "bg-gray-800" : "bg-white"}`}
+                    className={`rounded-xl border-none shadow-lg ${isDark ? "bg-gray-900" : "bg-white"}`}
                   >
                     <DropdownMenuLabel
                       className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
@@ -124,7 +124,7 @@ export default function LandingPage() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className="cursor-pointer"
+                      className="cursor-pointer text-red-600"
                       onSelect={() => signOut()}
                     >
                       Log out
