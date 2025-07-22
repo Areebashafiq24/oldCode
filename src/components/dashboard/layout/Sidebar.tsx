@@ -32,25 +32,31 @@ interface SidebarProps {
   onItemClick?: (label: string) => void;
 }
 
-const defaultNavItems: NavItem[] = [
-  { icon: <Home size={20} />, label: "Home", isActive: true },
-  { icon: <LayoutDashboard size={20} />, label: "Dashboard" },
-  { icon: <FolderKanban size={20} />, label: "Projects" },
-  { icon: <Calendar size={20} />, label: "Calendar" },
-  { icon: <Users size={20} />, label: "Team" },
+const companyEnrichmentItems: NavItem[] = [
+  { icon: <Building2 size={16} />, label: "Company Description" },
+  {
+    icon: <Building2 size={16} />,
+    label: "Company Job Openings (Website Scraper)",
+  },
+  { icon: <Building2 size={16} />, label: "Company News Summary" },
+  { icon: <Building2 size={16} />, label: "Company LinkedIn URL Finder" },
 ];
 
-const enrichmentNavItems: NavItem[] = [
-  { icon: <Mail size={20} />, label: "Email & Phone Enrichment" },
-  { icon: <Building2 size={20} />, label: "Company Enrichment" },
-  { icon: <Users size={20} />, label: "Person Enrichment" },
-  { icon: <Brain size={20} />, label: "AI Tools" },
+const personEnrichmentItems: NavItem[] = [
+  { icon: <Mail size={16} />, label: "Person Work Email" },
+  { icon: <Phone size={16} />, label: "Person Mobile Phone" },
+  { icon: <Users size={16} />, label: "Person LinkedIn URL" },
+  { icon: <Users size={16} />, label: "Person Job Title" },
+  { icon: <Mail size={16} />, label: "Personal Email" },
+  { icon: <Users size={16} />, label: "Person Location" },
+  { icon: <Users size={16} />, label: "Person Education" },
+  { icon: <Users size={16} />, label: "Person Bio Summary" },
 ];
 
-const aiEnrichmentNavItems: NavItem[] = [
-  { icon: <Target size={20} />, label: "ICP Fit Check – Reason + Scoring" },
-  { icon: <Brain size={20} />, label: "Pain Point Extraction" },
-  { icon: <PenTool size={20} />, label: "Company Name Cleanup" },
+const aiEnrichmentItems: NavItem[] = [
+  { icon: <Target size={16} />, label: "ICP Fit Check – Reason + Scoring" },
+  { icon: <Brain size={16} />, label: "Pain Point Extraction" },
+  { icon: <PenTool size={16} />, label: "Company Name Cleanup" },
 ];
 
 const defaultBottomItems: NavItem[] = [
@@ -59,7 +65,7 @@ const defaultBottomItems: NavItem[] = [
 ];
 
 const Sidebar = ({
-  items = defaultNavItems,
+  items,
   activeItem = "Home",
   onItemClick = () => {},
 }: SidebarProps) => {
@@ -70,82 +76,89 @@ const Sidebar = ({
     >
       <div className="p-6">
         <h2
-          className={`text-xl font-semibold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}
+          className={`text-lg font-semibold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}
         >
-          Lead Mend
+          Lead Mend Enrichment Templates
         </h2>
-        <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-          Find anyone's email in seconds
-        </p>
       </div>
 
       <ScrollArea className="flex-1 px-4">
-        <div className="space-y-1.5">
-          {items.map((item) => (
-            <Button
-              key={item.label}
-              variant={"ghost"}
-              className={`w-full justify-start gap-3 h-10 rounded-xl text-sm font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
-              onClick={() => onItemClick(item.label)}
-            >
-              <span
-                className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
+        {/* ENRICH COMPANY INFO */}
+        <div className="space-y-3 mb-6">
+          <h3
+            className={`text-xs font-medium px-2 py-1 ${isDark ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider`}
+          >
+            1. ENRICH COMPANY INFO
+          </h3>
+          <div className="space-y-1">
+            {companyEnrichmentItems.map((item) => (
+              <Button
+                key={item.label}
+                variant={"ghost"}
+                className={`w-full justify-start gap-3 h-9 rounded-lg text-xs font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
+                onClick={() => onItemClick(item.label)}
               >
-                {item.icon}
-              </span>
-              {item.label}
-            </Button>
-          ))}
+                <span
+                  className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
+                >
+                  {item.icon}
+                </span>
+                {item.label}
+              </Button>
+            ))}
+          </div>
         </div>
 
-        <Separator
-          className={`my-4 ${isDark ? "bg-white/10" : "bg-gray-100"}`}
-        />
-
-        <div className="space-y-3">
+        {/* ENRICH PERSON INFO */}
+        <div className="space-y-3 mb-6">
           <h3
-            className={`text-xs font-medium px-4 py-1 ${isDark ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider`}
+            className={`text-xs font-medium px-2 py-1 ${isDark ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider`}
           >
-            Enrichment Tools
+            2. ENRICH PERSON INFO
           </h3>
-          {enrichmentNavItems.map((item) => (
-            <Button
-              key={item.label}
-              variant={"ghost"}
-              className={`w-full justify-start gap-3 h-10 rounded-xl text-sm font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
-              onClick={() => onItemClick(item.label)}
-            >
-              <span
-                className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
+          <div className="space-y-1">
+            {personEnrichmentItems.map((item) => (
+              <Button
+                key={item.label}
+                variant={"ghost"}
+                className={`w-full justify-start gap-3 h-9 rounded-lg text-xs font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
+                onClick={() => onItemClick(item.label)}
               >
-                {item.icon}
-              </span>
-              {item.label}
-            </Button>
-          ))}
+                <span
+                  className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
+                >
+                  {item.icon}
+                </span>
+                {item.label}
+              </Button>
+            ))}
+          </div>
         </div>
 
-        <div className="space-y-3 mt-6">
+        {/* AI ENRICHMENT */}
+        <div className="space-y-3 mb-6">
           <h3
-            className={`text-xs font-medium px-4 py-1 ${isDark ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider`}
+            className={`text-xs font-medium px-2 py-1 ${isDark ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider`}
           >
-            AI Enrichment
+            3. AI ENRICHMENT
           </h3>
-          {aiEnrichmentNavItems.map((item) => (
-            <Button
-              key={item.label}
-              variant={"ghost"}
-              className={`w-full justify-start gap-3 h-10 rounded-xl text-sm font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
-              onClick={() => onItemClick(item.label)}
-            >
-              <span
-                className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
+          <div className="space-y-1">
+            {aiEnrichmentItems.map((item) => (
+              <Button
+                key={item.label}
+                variant={"ghost"}
+                className={`w-full justify-start gap-3 h-9 rounded-lg text-xs font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
+                onClick={() => onItemClick(item.label)}
               >
-                {item.icon}
-              </span>
-              {item.label}
-            </Button>
-          ))}
+                <span
+                  className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
+                >
+                  {item.icon}
+                </span>
+                {item.label}
+              </Button>
+            ))}
+          </div>
         </div>
       </ScrollArea>
 
