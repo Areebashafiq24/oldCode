@@ -20,34 +20,6 @@ const CompanyNameCleanup = ({ className = "" }: CompanyNameCleanupProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isDark } = useTheme();
 
-  const enrichmentServices = {
-    "NAME CLEANUP FEATURES": [
-      { name: "Legal Suffix Removal", icon: <Scissors className="h-4 w-4" /> },
-      {
-        name: "Standardized Formatting",
-        icon: <RefreshCw className="h-4 w-4" />,
-      },
-      {
-        name: "Duplicate Detection",
-        icon: <CheckCircle className="h-4 w-4" />,
-      },
-      { name: "Brand Name Extraction", icon: <PenTool className="h-4 w-4" /> },
-      {
-        name: "Special Character Cleanup",
-        icon: <Scissors className="h-4 w-4" />,
-      },
-      {
-        name: "Abbreviation Expansion",
-        icon: <RefreshCw className="h-4 w-4" />,
-      },
-      { name: "Case Normalization", icon: <FileText className="h-4 w-4" /> },
-      {
-        name: "Whitespace Trimming",
-        icon: <CheckCircle className="h-4 w-4" />,
-      },
-    ],
-  };
-
   return (
     <div
       className={`min-h-screen ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"} ${className}`}

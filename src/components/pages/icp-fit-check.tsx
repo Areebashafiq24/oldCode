@@ -13,37 +13,6 @@ const ICPFitCheck = ({ className = "" }: ICPFitCheckProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isDark } = useTheme();
 
-  const enrichmentServices = {
-    "ICP FIT CHECK FEATURES": [
-      {
-        name: "Company Profile Analysis",
-        icon: <FileText className="h-4 w-4" />,
-      },
-      { name: "Market Fit Scoring", icon: <Target className="h-4 w-4" /> },
-      {
-        name: "Industry Alignment Check",
-        icon: <CheckCircle className="h-4 w-4" />,
-      },
-      { name: "Revenue Range Matching", icon: <Target className="h-4 w-4" /> },
-      {
-        name: "Employee Size Validation",
-        icon: <CheckCircle className="h-4 w-4" />,
-      },
-      {
-        name: "Technology Stack Analysis",
-        icon: <FileText className="h-4 w-4" />,
-      },
-      {
-        name: "Geographic Fit Assessment",
-        icon: <Target className="h-4 w-4" />,
-      },
-      {
-        name: "Growth Stage Evaluation",
-        icon: <CheckCircle className="h-4 w-4" />,
-      },
-    ],
-  };
-
   return (
     <div
       className={`min-h-screen ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"} ${className}`}
