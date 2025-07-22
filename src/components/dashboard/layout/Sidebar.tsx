@@ -14,6 +14,8 @@ import {
   Phone,
   Building2,
   Brain,
+  Target,
+  PenTool,
 } from "lucide-react";
 import { useTheme } from "../../../App";
 
@@ -43,6 +45,12 @@ const enrichmentNavItems: NavItem[] = [
   { icon: <Building2 size={20} />, label: "Company Enrichment" },
   { icon: <Users size={20} />, label: "Person Enrichment" },
   { icon: <Brain size={20} />, label: "AI Tools" },
+];
+
+const aiEnrichmentNavItems: NavItem[] = [
+  { icon: <Target size={20} />, label: "ICP Fit Check – Reason + Scoring" },
+  { icon: <Brain size={20} />, label: "Pain Point Extraction" },
+  { icon: <PenTool size={20} />, label: "Company Name Cleanup" },
 ];
 
 const defaultBottomItems: NavItem[] = [
@@ -101,6 +109,29 @@ const Sidebar = ({
             Enrichment Tools
           </h3>
           {enrichmentNavItems.map((item) => (
+            <Button
+              key={item.label}
+              variant={"ghost"}
+              className={`w-full justify-start gap-3 h-10 rounded-xl text-sm font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
+              onClick={() => onItemClick(item.label)}
+            >
+              <span
+                className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
+              >
+                {item.icon}
+              </span>
+              {item.label}
+            </Button>
+          ))}
+        </div>
+
+        <div className="space-y-3 mt-6">
+          <h3
+            className={`text-xs font-medium px-4 py-1 ${isDark ? "text-gray-400" : "text-gray-500"} uppercase tracking-wider`}
+          >
+            AI Enrichment
+          </h3>
+          {aiEnrichmentNavItems.map((item) => (
             <Button
               key={item.label}
               variant={"ghost"}
