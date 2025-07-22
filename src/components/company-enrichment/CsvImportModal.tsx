@@ -474,45 +474,69 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
                           )}
                         </div>
                       </div>
-                      <div className="overflow-auto max-h-96">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              {(enrichedData || csvData).headers.map(
-                                (header, index) => (
-                                  <TableHead
-                                    key={index}
-                                    className={
-                                      isDark ? "text-gray-300" : "text-gray-700"
-                                    }
+                      <div className="relative">
+                        {/* Fixed Header Container */}
+                        <div
+                          className={`sticky top-0 z-10 ${isDark ? "bg-gray-800" : "bg-white"} border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
+                        >
+                          <div className="overflow-x-auto">
+                            <table className="w-full min-w-max">
+                              <thead>
+                                <tr>
+                                  {(enrichedData || csvData).headers.map(
+                                    (header, index) => (
+                                      <th
+                                        key={index}
+                                        className={`px-4 py-3 text-left text-sm font-semibold whitespace-nowrap min-w-[120px] max-w-[200px] ${isDark ? "text-gray-200 bg-gray-800" : "text-gray-700 bg-gray-50"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
+                                        title={header}
+                                      >
+                                        <div className="truncate">{header}</div>
+                                      </th>
+                                    ),
+                                  )}
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
+                        </div>
+
+                        {/* Scrollable Body Container */}
+                        <div className="overflow-auto max-h-80">
+                          <table className="w-full min-w-max">
+                            <tbody>
+                              {(enrichedData || csvData).rows.map(
+                                (row, rowIndex) => (
+                                  <tr
+                                    key={rowIndex}
+                                    className={`border-b ${isDark ? "border-gray-700 hover:bg-gray-700/30" : "border-gray-200 hover:bg-gray-50"} transition-colors`}
                                   >
-                                    {header}
-                                  </TableHead>
+                                    {row.map((cell, cellIndex) => {
+                                      const cellContent = cell || "-";
+                                      const isLongContent =
+                                        cellContent.length > 30;
+
+                                      return (
+                                        <td
+                                          key={cellIndex}
+                                          className={`px-4 py-3 text-sm whitespace-nowrap min-w-[120px] max-w-[200px] ${isDark ? "text-gray-300" : "text-gray-600"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
+                                          title={
+                                            isLongContent
+                                              ? cellContent
+                                              : undefined
+                                          }
+                                        >
+                                          <div className="truncate">
+                                            {cellContent}
+                                          </div>
+                                        </td>
+                                      );
+                                    })}
+                                  </tr>
                                 ),
                               )}
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {(enrichedData || csvData).rows.map(
-                              (row, rowIndex) => (
-                                <TableRow key={rowIndex}>
-                                  {row.map((cell, cellIndex) => (
-                                    <TableCell
-                                      key={cellIndex}
-                                      className={
-                                        isDark
-                                          ? "text-gray-400"
-                                          : "text-gray-600"
-                                      }
-                                    >
-                                      {cell || "-"}
-                                    </TableCell>
-                                  ))}
-                                </TableRow>
-                              ),
-                            )}
-                          </TableBody>
-                        </Table>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
