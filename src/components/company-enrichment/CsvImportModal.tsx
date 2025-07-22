@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -57,6 +58,14 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+  // Toggle states for enrichment options
+  const [companyJobOpenings, setCompanyJobOpenings] = useState(false);
+  const [companyDescription, setCompanyDescription] = useState(false);
+  const [companyNewsSummary, setCompanyNewsSummary] = useState(false);
+  const [companyLinkedinUrlFinder, setCompanyLinkedinUrlFinder] =
+    useState(false);
+
   const { isDark } = useTheme();
   const { toast } = useToast();
 
@@ -153,11 +162,30 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
     }
   };
 
+  // Check if at least one toggle is selected
+  const isAnyToggleSelected =
+    companyJobOpenings ||
+    companyDescription ||
+    companyNewsSummary ||
+    companyLinkedinUrlFinder;
+
+  // Check if form is ready for submission
+  const isFormReady = uploadedFile && isAnyToggleSelected;
+
   const handleStartEnrichment = async () => {
     if (!csvData || !uploadedFile) {
       toast({
         title: "No file uploaded",
         description: "Please upload a CSV file first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!isAnyToggleSelected) {
+      toast({
+        title: "No enrichment options selected",
+        description: "Please select at least one enrichment option",
         variant: "destructive",
       });
       return;
@@ -172,6 +200,15 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
     try {
       const formData = new FormData();
       formData.append("file", uploadedFile);
+
+      // Add boolean form fields for enrichment options
+      formData.append("company_job_openings", companyJobOpenings.toString());
+      formData.append("company_description", companyDescription.toString());
+      formData.append("company_news_summary", companyNewsSummary.toString());
+      formData.append(
+        "company_linkedin_url_finder",
+        companyLinkedinUrlFinder.toString(),
+      );
 
       const response = await fetch("http://localhost:8000/enrich-company", {
         method: "POST",
@@ -256,6 +293,10 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
     setEnrichedData(null);
     setUploadedFile(null);
     setIsProcessing(false);
+    setCompanyJobOpenings(false);
+    setCompanyDescription(false);
+    setCompanyNewsSummary(false);
+    setCompanyLinkedinUrlFinder(false);
   };
 
   const handleClose = () => {
@@ -328,9 +369,14 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
                       onChange={handleFileInputChange}
                       className="hidden"
                       id="csv-upload"
+                      disabled={isProcessing}
                     />
                     <label htmlFor="csv-upload">
-                      <Button asChild className="cursor-pointer">
+                      <Button
+                        asChild
+                        className="cursor-pointer"
+                        disabled={isProcessing}
+                      >
                         <span>
                           <FileText className="h-4 w-4 mr-2" />
                           Choose CSV File
@@ -495,6 +541,127 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
 
             {/* Action Section */}
             <div className="space-y-6">
+              {/* Enrichment Options */}
+              <Card
+                className={isDark ? "bg-gray-800 border-gray-700" : "bg-white"}
+              >
+                <CardContent className="p-6">
+                  <h4
+                    className={`font-semibold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
+                  >
+                    Enrichment Options
+                  </h4>
+
+                  <div className="space-y-4">
+                    {/* Company Job Openings */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <label
+                          htmlFor="company-job-openings"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                        >
+                          Company Job Openings
+                        </label>
+                        <p
+                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                        >
+                          Hiring status, job titles, and careers URL
+                        </p>
+                      </div>
+                      <Switch
+                        id="company-job-openings"
+                        checked={companyJobOpenings}
+                        onCheckedChange={setCompanyJobOpenings}
+                        disabled={isProcessing}
+                      />
+                    </div>
+
+                    {/* Company Description */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <label
+                          htmlFor="company-description"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                        >
+                          Company Description Summary
+                        </label>
+                        <p
+                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                        >
+                          Business description and summary
+                        </p>
+                      </div>
+                      <Switch
+                        id="company-description"
+                        checked={companyDescription}
+                        onCheckedChange={setCompanyDescription}
+                        disabled={isProcessing}
+                      />
+                    </div>
+
+                    {/* Company News Summary */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <label
+                          htmlFor="company-news-summary"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                        >
+                          Company News Summary
+                        </label>
+                        <p
+                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                        >
+                          Latest news and updates
+                        </p>
+                      </div>
+                      <Switch
+                        id="company-news-summary"
+                        checked={companyNewsSummary}
+                        onCheckedChange={setCompanyNewsSummary}
+                        disabled={isProcessing}
+                      />
+                    </div>
+
+                    {/* Company LinkedIn URL Finder */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <label
+                          htmlFor="company-linkedin-url"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                        >
+                          Company LinkedIn URL Finder
+                        </label>
+                        <p
+                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                        >
+                          Find LinkedIn company profiles
+                        </p>
+                      </div>
+                      <Switch
+                        id="company-linkedin-url"
+                        checked={companyLinkedinUrlFinder}
+                        onCheckedChange={setCompanyLinkedinUrlFinder}
+                        disabled={isProcessing}
+                      />
+                    </div>
+                  </div>
+
+                  {!isAnyToggleSelected && uploadedFile && (
+                    <div
+                      className={`mt-4 p-3 rounded-lg ${isDark ? "bg-yellow-900/20" : "bg-yellow-50"}`}
+                    >
+                      <p
+                        className={`text-sm ${isDark ? "text-yellow-300" : "text-yellow-700"}`}
+                      >
+                        Please select at least one enrichment option to
+                        continue.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Enrichment Process */}
               <Card
                 className={isDark ? "bg-gray-800 border-gray-700" : "bg-white"}
               >
@@ -536,7 +703,7 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
                             className={`text-sm ${isDark ? "text-blue-300" : "text-blue-600"}`}
                           >
                             {csvData.totalRows.toLocaleString()} companies will
-                            be enriched with comprehensive business data.
+                            be enriched with selected data options.
                           </p>
                         </div>
                       )}
@@ -544,8 +711,8 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
                       {!enrichedData ? (
                         <Button
                           onClick={handleStartEnrichment}
-                          disabled={isProcessing}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                          disabled={isProcessing || !isFormReady}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
                           size="lg"
                         >
                           {isProcessing ? (
