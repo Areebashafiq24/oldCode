@@ -214,7 +214,7 @@ function AppRoutes() {
           <Route path="/success" element={<Success />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
-        {useRoutes(routes)}
+        {import.meta.env.VITE_TEMPO && useRoutes(routes)}
       </AuthProvider>
     </ThemeProvider>
   );
