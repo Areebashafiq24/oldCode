@@ -479,7 +479,7 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
                         <div
                           className={`sticky top-0 z-10 ${isDark ? "bg-gray-800" : "bg-white"} border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
                         >
-                          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
+                          <div className="overflow-x-auto">
                             <table className="w-full min-w-max">
                               <thead>
                                 <tr>
@@ -501,7 +501,7 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
                         </div>
 
                         {/* Scrollable Body Container */}
-                        <div className="overflow-auto max-h-80 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
+                        <div className="overflow-auto max-h-80">
                           <table className="w-full min-w-max">
                             <tbody>
                               {(enrichedData || csvData).rows.map(
@@ -537,38 +537,6 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
                             </tbody>
                           </table>
                         </div>
-
-                        {/* Custom Scrollbar Styles */}
-                        <style jsx>{`
-                          .scrollbar-thin {
-                            scrollbar-width: thin;
-                          }
-                          .scrollbar-thumb-gray-400 {
-                            scrollbar-color: #9ca3af transparent;
-                          }
-                          .scrollbar-track-transparent {
-                            scrollbar-track-color: transparent;
-                          }
-
-                          /* Webkit scrollbar styles */
-                          .scrollbar-thin::-webkit-scrollbar {
-                            width: 6px;
-                            height: 6px;
-                          }
-                          .scrollbar-thin::-webkit-scrollbar-track {
-                            background: transparent;
-                          }
-                          .scrollbar-thin::-webkit-scrollbar-thumb {
-                            background-color: #9ca3af;
-                            border-radius: 3px;
-                          }
-                          .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-                            background-color: #6b7280;
-                          }
-                          .scrollbar-thin::-webkit-scrollbar-corner {
-                            background: transparent;
-                          }
-                        `}</style>
                       </div>
                     </CardContent>
                   </Card>
