@@ -19,6 +19,9 @@ import CompanyEnrichment from "./components/pages/company-enrichment";
 import PersonEnrichment from "./components/pages/person-enrichment";
 import EnrichPersonInfo from "./components/pages/enrich-person-info";
 import AITools from "./components/pages/ai-tools";
+import ICPFitCheck from "./components/pages/icp-fit-check";
+import PainPointExtraction from "./components/pages/pain-point-extraction";
+import CompanyNameCleanup from "./components/pages/company-name-cleanup";
 import RecentActivity from "./components/pages/recent-activity";
 import Settings from "./components/pages/settings";
 import Error404 from "./components/pages/error-404";
@@ -165,6 +168,30 @@ function AppRoutes() {
             element={
               <PrivateRoute>
                 <AITools />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/icp-fit-check"
+            element={
+              <PrivateRoute>
+                <ICPFitCheck />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pain-point-extraction"
+            element={
+              <PrivateRoute>
+                <PainPointExtraction />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/company-name-cleanup"
+            element={
+              <PrivateRoute>
+                <CompanyNameCleanup />
               </PrivateRoute>
             }
           />
