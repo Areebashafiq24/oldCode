@@ -72,7 +72,7 @@ const Sidebar = ({
   const { isDark } = useTheme();
   return (
     <div
-      className={`w-[280px] h-full ${isDark ? "glass-card-dark border-white/10" : "bg-white/80 border-gray-200"} backdrop-blur-md border-r flex flex-col`}
+      className={`w-[280px] h-full ${isDark ? "leadmagic-gradient border-white/10" : "leadmagic-gradient-light border-gray-200"} backdrop-blur-md border-r flex flex-col`}
     >
       <div className="p-6">
         <h2

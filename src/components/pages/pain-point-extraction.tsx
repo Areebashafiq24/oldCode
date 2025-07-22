@@ -20,43 +20,6 @@ const PainPointExtraction = ({ className = "" }: PainPointExtractionProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isDark } = useTheme();
 
-  const enrichmentServices = {
-    "PAIN POINT ANALYSIS FEATURES": [
-      {
-        name: "Industry Challenge Identification",
-        icon: <AlertCircle className="h-4 w-4" />,
-      },
-      {
-        name: "Market Trend Analysis",
-        icon: <TrendingDown className="h-4 w-4" />,
-      },
-      {
-        name: "Competitive Pressure Points",
-        icon: <Search className="h-4 w-4" />,
-      },
-      {
-        name: "Operational Inefficiencies",
-        icon: <Brain className="h-4 w-4" />,
-      },
-      {
-        name: "Technology Gap Analysis",
-        icon: <FileText className="h-4 w-4" />,
-      },
-      {
-        name: "Growth Bottleneck Detection",
-        icon: <TrendingDown className="h-4 w-4" />,
-      },
-      {
-        name: "Customer Experience Issues",
-        icon: <AlertCircle className="h-4 w-4" />,
-      },
-      {
-        name: "Regulatory Compliance Challenges",
-        icon: <Search className="h-4 w-4" />,
-      },
-    ],
-  };
-
   return (
     <div
       className={`min-h-screen ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"} ${className}`}
