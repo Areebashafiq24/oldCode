@@ -5,6 +5,8 @@ import Sidebar from "../dashboard/layout/Sidebar";
 import ICPFitCheck from "./icp-fit-check";
 import PainPointExtraction from "./pain-point-extraction";
 import CompanyNameCleanup from "./company-name-cleanup";
+import PersonWorkEmail from "./person-work-email";
+import PersonMobilePhone from "./person-mobile-phone";
 import { useTheme } from "../../App";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,9 +33,13 @@ const Home = () => {
         setCurrentView("company-enrichment");
         break;
 
-      // Person Enrichment Services - do nothing
+      // Person Enrichment Services - open specific pages
       case "Person Work Email":
+        setCurrentView("person-work-email");
+        break;
       case "Person Mobile Phone":
+        setCurrentView("person-mobile-phone");
+        break;
       case "Person LinkedIn URL":
       case "Person Job Title":
       case "Personal Email":
@@ -67,6 +73,10 @@ const Home = () => {
         return <PainPointExtraction />;
       case "company-name-cleanup":
         return <CompanyNameCleanup />;
+      case "person-work-email":
+        return <PersonWorkEmail />;
+      case "person-mobile-phone":
+        return <PersonMobilePhone />;
       case "company-enrichment":
       default:
         return (
