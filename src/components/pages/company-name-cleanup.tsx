@@ -105,6 +105,7 @@ const CompanyNameCleanup = ({ className = "" }: CompanyNameCleanupProps) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         hideEnrichmentOptions={true}
+        apiEndpoint="/company-name-cleanup"
       />
     </div>
   );

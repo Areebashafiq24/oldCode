@@ -98,6 +98,7 @@ const ICPFitCheck = ({ className = "" }: ICPFitCheckProps) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         hideEnrichmentOptions={true}
+        apiEndpoint="/icp-fit-check"
       />
     </div>
   );
