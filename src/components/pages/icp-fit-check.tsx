@@ -15,7 +15,7 @@ const ICPFitCheck = ({ className = "" }: ICPFitCheckProps) => {
 
   return (
     <div
-      className={`min-h-screen ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"} ${className}`}
+      className={`min-h-screen h-full ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"} ${className}`}
     >
       <div className="px-6 py-12">
         {/* Header */}
