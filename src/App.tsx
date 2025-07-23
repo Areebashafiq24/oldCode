@@ -18,6 +18,8 @@ import Docs from "./components/pages/docs";
 import CompanyEnrichment from "./components/pages/company-enrichment";
 import PersonEnrichment from "./components/pages/person-enrichment";
 import EnrichPersonInfo from "./components/pages/enrich-person-info";
+import PersonWorkEmail from "./components/pages/person-work-email";
+import PersonMobilePhone from "./components/pages/person-mobile-phone";
 import AITools from "./components/pages/ai-tools";
 import ICPFitCheck from "./components/pages/icp-fit-check";
 import PainPointExtraction from "./components/pages/pain-point-extraction";
@@ -160,6 +162,22 @@ function AppRoutes() {
             element={
               <PrivateRoute>
                 <EnrichPersonInfo />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/person-work-email"
+            element={
+              <PrivateRoute>
+                <PersonWorkEmail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/person-mobile-phone"
+            element={
+              <PrivateRoute>
+                <PersonMobilePhone />
               </PrivateRoute>
             }
           />
