@@ -71,7 +71,7 @@ const Home = () => {
       default:
         return (
           <div
-            className={`min-h-screen ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"}`}
+            className={`min-h-screen h-full ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"}`}
           >
             <div className="px-6 py-12">
               {/* Header */}
@@ -160,11 +160,13 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div
+      className={`min-h-screen h-full flex ${isDark ? "leadmagic-gradient" : "leadmagic-gradient-light"}`}
+    >
       <TopNavigation />
-      <div className="flex w-full mt-16">
+      <div className="flex w-full mt-16 h-full">
         <Sidebar activeItem={activeItem} onItemClick={handleNavigation} />
-        <div className="flex-1">{renderCurrentView()}</div>
+        <div className="flex-1 h-full">{renderCurrentView()}</div>
       </div>
     </div>
   );
