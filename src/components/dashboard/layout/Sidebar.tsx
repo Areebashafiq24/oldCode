@@ -47,12 +47,10 @@ const personEnrichmentItems: NavItem[] = [
   {
     icon: <Mail size={16} />,
     label: "Person Work Email",
-    href: "/person-work-email",
   },
   {
     icon: <Phone size={16} />,
     label: "Person Mobile Phone",
-    href: "/person-mobile-phone",
   },
   { icon: <Users size={16} />, label: "Person LinkedIn URL" },
   { icon: <Users size={16} />, label: "Person Job Title" },
@@ -82,11 +80,7 @@ const Sidebar = ({
   const navigate = useNavigate();
 
   const handleItemClick = (item: NavItem) => {
-    if (item.href) {
-      navigate(item.href);
-    } else {
-      onItemClick(item.label);
-    }
+    onItemClick(item.label);
   };
   return (
     <div
