@@ -18,6 +18,7 @@ import {
   PenTool,
 } from "lucide-react";
 import { useTheme } from "../../../App";
+import { useNavigate } from "react-router-dom";
 
 interface NavItem {
   icon: React.ReactNode;
@@ -43,8 +44,16 @@ const companyEnrichmentItems: NavItem[] = [
 ];
 
 const personEnrichmentItems: NavItem[] = [
-  { icon: <Mail size={16} />, label: "Person Work Email" },
-  { icon: <Phone size={16} />, label: "Person Mobile Phone" },
+  {
+    icon: <Mail size={16} />,
+    label: "Person Work Email",
+    href: "/person-work-email",
+  },
+  {
+    icon: <Phone size={16} />,
+    label: "Person Mobile Phone",
+    href: "/person-mobile-phone",
+  },
   { icon: <Users size={16} />, label: "Person LinkedIn URL" },
   { icon: <Users size={16} />, label: "Person Job Title" },
   { icon: <Mail size={16} />, label: "Personal Email" },
@@ -70,6 +79,15 @@ const Sidebar = ({
   onItemClick = () => {},
 }: SidebarProps) => {
   const { isDark } = useTheme();
+  const navigate = useNavigate();
+
+  const handleItemClick = (item: NavItem) => {
+    if (item.href) {
+      navigate(item.href);
+    } else {
+      onItemClick(item.label);
+    }
+  };
   return (
     <div
       className={`w-[280px] h-full ${isDark ? "leadmagic-gradient border-white/10" : "leadmagic-gradient-light border-gray-200"} backdrop-blur-md border-r flex flex-col`}
@@ -122,7 +140,7 @@ const Sidebar = ({
                 key={item.label}
                 variant={"ghost"}
                 className={`w-full justify-start gap-3 h-9 rounded-lg text-xs font-medium ${item.label === activeItem ? (isDark ? "bg-blue-900/50 text-blue-400 hover:bg-blue-900/70" : "bg-blue-50 text-blue-600 hover:bg-blue-100") : isDark ? "text-gray-300 hover:bg-white/10" : "text-gray-700 hover:bg-gray-100"}`}
-                onClick={() => onItemClick(item.label)}
+                onClick={() => handleItemClick(item)}
               >
                 <span
                   className={`${item.label === activeItem ? (isDark ? "text-blue-400" : "text-blue-600") : isDark ? "text-gray-400" : "text-gray-500"}`}
