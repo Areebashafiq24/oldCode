@@ -34,6 +34,7 @@ interface CsvImportModalProps {
   isOpen: boolean;
   onClose: () => void;
   hideEnrichmentOptions?: boolean;
+  apiEndpoint?: string;
 }
 
 interface CsvData {
@@ -55,6 +56,7 @@ const CsvImportModal = ({
   isOpen,
   onClose,
   hideEnrichmentOptions = false,
+  apiEndpoint = "/enrich-company",
 }: CsvImportModalProps) => {
   const [csvData, setCsvData] = useState<CsvData | null>(null);
   const [enrichedData, setEnrichedData] = useState<EnrichedCsvData | null>(
@@ -216,7 +218,7 @@ const CsvImportModal = ({
         companyLinkedinUrlFinder.toString(),
       );
 
-      const response = await fetch("http://localhost:8000/enrich-company", {
+      const response = await fetch(`http://localhost:8000${apiEndpoint}`, {
         method: "POST",
         body: formData,
       });

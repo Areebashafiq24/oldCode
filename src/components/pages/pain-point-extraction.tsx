@@ -105,6 +105,7 @@ const PainPointExtraction = ({ className = "" }: PainPointExtractionProps) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         hideEnrichmentOptions={true}
+        apiEndpoint="/pain-point-extraction"
       />
     </div>
   );
