@@ -104,6 +104,7 @@ const PainPointExtraction = ({ className = "" }: PainPointExtractionProps) => {
       <CsvImportModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        hideEnrichmentOptions={true}
       />
     </div>
   );

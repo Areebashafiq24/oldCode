@@ -104,6 +104,7 @@ const CompanyNameCleanup = ({ className = "" }: CompanyNameCleanupProps) => {
       <CsvImportModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        hideEnrichmentOptions={true}
       />
     </div>
   );
