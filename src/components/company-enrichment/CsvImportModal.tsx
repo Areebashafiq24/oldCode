@@ -33,6 +33,7 @@ import { useToast } from "@/components/ui/use-toast";
 interface CsvImportModalProps {
   isOpen: boolean;
   onClose: () => void;
+  hideEnrichmentOptions?: boolean;
 }
 
 interface CsvData {
@@ -50,7 +51,11 @@ interface EnrichedCsvData {
   blob?: Blob;
 }
 
-const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
+const CsvImportModal = ({
+  isOpen,
+  onClose,
+  hideEnrichmentOptions = false,
+}: CsvImportModalProps) => {
   const [csvData, setCsvData] = useState<CsvData | null>(null);
   const [enrichedData, setEnrichedData] = useState<EnrichedCsvData | null>(
     null,
@@ -170,7 +175,8 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
     companyLinkedinUrlFinder;
 
   // Check if form is ready for submission
-  const isFormReady = uploadedFile && isAnyToggleSelected;
+  const isFormReady =
+    uploadedFile && (hideEnrichmentOptions || isAnyToggleSelected);
 
   const handleStartEnrichment = async () => {
     if (!csvData || !uploadedFile) {
@@ -182,7 +188,7 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
       return;
     }
 
-    if (!isAnyToggleSelected) {
+    if (!hideEnrichmentOptions && !isAnyToggleSelected) {
       toast({
         title: "No enrichment options selected",
         description: "Please select at least one enrichment option",
@@ -566,124 +572,128 @@ const CsvImportModal = ({ isOpen, onClose }: CsvImportModalProps) => {
             {/* Action Section */}
             <div className="space-y-6">
               {/* Enrichment Options */}
-              <Card
-                className={isDark ? "bg-gray-800 border-gray-700" : "bg-white"}
-              >
-                <CardContent className="p-6">
-                  <h4
-                    className={`font-semibold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
-                  >
-                    Enrichment Options
-                  </h4>
-
-                  <div className="space-y-4">
-                    {/* Company Job Openings */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <label
-                          htmlFor="company-job-openings"
-                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
-                        >
-                          Company Job Openings
-                        </label>
-                        <p
-                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
-                        >
-                          Hiring status, job titles, and careers URL
-                        </p>
-                      </div>
-                      <Switch
-                        id="company-job-openings"
-                        checked={companyJobOpenings}
-                        onCheckedChange={setCompanyJobOpenings}
-                        disabled={isProcessing}
-                      />
-                    </div>
-
-                    {/* Company Description */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <label
-                          htmlFor="company-description"
-                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
-                        >
-                          Company Description Summary
-                        </label>
-                        <p
-                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
-                        >
-                          Business description and summary
-                        </p>
-                      </div>
-                      <Switch
-                        id="company-description"
-                        checked={companyDescription}
-                        onCheckedChange={setCompanyDescription}
-                        disabled={isProcessing}
-                      />
-                    </div>
-
-                    {/* Company News Summary */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <label
-                          htmlFor="company-news-summary"
-                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
-                        >
-                          Company News Summary
-                        </label>
-                        <p
-                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
-                        >
-                          Latest news and updates
-                        </p>
-                      </div>
-                      <Switch
-                        id="company-news-summary"
-                        checked={companyNewsSummary}
-                        onCheckedChange={setCompanyNewsSummary}
-                        disabled={isProcessing}
-                      />
-                    </div>
-
-                    {/* Company LinkedIn URL Finder */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <label
-                          htmlFor="company-linkedin-url"
-                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
-                        >
-                          Company LinkedIn URL Finder
-                        </label>
-                        <p
-                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
-                        >
-                          Find LinkedIn company profiles
-                        </p>
-                      </div>
-                      <Switch
-                        id="company-linkedin-url"
-                        checked={companyLinkedinUrlFinder}
-                        onCheckedChange={setCompanyLinkedinUrlFinder}
-                        disabled={isProcessing}
-                      />
-                    </div>
-                  </div>
-
-                  {!isAnyToggleSelected && uploadedFile && (
-                    <div
-                      className={`mt-4 p-3 rounded-lg ${isDark ? "bg-yellow-900/20" : "bg-yellow-50"}`}
+              {!hideEnrichmentOptions && (
+                <Card
+                  className={
+                    isDark ? "bg-gray-800 border-gray-700" : "bg-white"
+                  }
+                >
+                  <CardContent className="p-6">
+                    <h4
+                      className={`font-semibold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
                     >
-                      <p
-                        className={`text-sm ${isDark ? "text-yellow-300" : "text-yellow-700"}`}
-                      >
-                        Please select at least one enrichment option to
-                        continue.
-                      </p>
+                      Enrichment Options
+                    </h4>
+
+                    <div className="space-y-4">
+                      {/* Company Job Openings */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <label
+                            htmlFor="company-job-openings"
+                            className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                          >
+                            Company Job Openings
+                          </label>
+                          <p
+                            className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                          >
+                            Hiring status, job titles, and careers URL
+                          </p>
+                        </div>
+                        <Switch
+                          id="company-job-openings"
+                          checked={companyJobOpenings}
+                          onCheckedChange={setCompanyJobOpenings}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Company Description */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <label
+                            htmlFor="company-description"
+                            className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                          >
+                            Company Description Summary
+                          </label>
+                          <p
+                            className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                          >
+                            Business description and summary
+                          </p>
+                        </div>
+                        <Switch
+                          id="company-description"
+                          checked={companyDescription}
+                          onCheckedChange={setCompanyDescription}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Company News Summary */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <label
+                            htmlFor="company-news-summary"
+                            className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                          >
+                            Company News Summary
+                          </label>
+                          <p
+                            className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                          >
+                            Latest news and updates
+                          </p>
+                        </div>
+                        <Switch
+                          id="company-news-summary"
+                          checked={companyNewsSummary}
+                          onCheckedChange={setCompanyNewsSummary}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Company LinkedIn URL Finder */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <label
+                            htmlFor="company-linkedin-url"
+                            className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"} cursor-pointer`}
+                          >
+                            Company LinkedIn URL Finder
+                          </label>
+                          <p
+                            className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"} mt-1`}
+                          >
+                            Find LinkedIn company profiles
+                          </p>
+                        </div>
+                        <Switch
+                          id="company-linkedin-url"
+                          checked={companyLinkedinUrlFinder}
+                          onCheckedChange={setCompanyLinkedinUrlFinder}
+                          disabled={isProcessing}
+                        />
+                      </div>
                     </div>
-                  )}
-                </CardContent>
-              </Card>
+
+                    {!isAnyToggleSelected && uploadedFile && (
+                      <div
+                        className={`mt-4 p-3 rounded-lg ${isDark ? "bg-yellow-900/20" : "bg-yellow-50"}`}
+                      >
+                        <p
+                          className={`text-sm ${isDark ? "text-yellow-300" : "text-yellow-700"}`}
+                        >
+                          Please select at least one enrichment option to
+                          continue.
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Enrichment Process */}
               <Card

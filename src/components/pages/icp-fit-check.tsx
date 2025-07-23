@@ -97,6 +97,7 @@ const ICPFitCheck = ({ className = "" }: ICPFitCheckProps) => {
       <CsvImportModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        hideEnrichmentOptions={true}
       />
     </div>
   );
