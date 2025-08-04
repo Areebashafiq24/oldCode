@@ -106,7 +106,7 @@ const CustomSalesEmail = ({ className = "" }: CustomSalesEmailProps) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         hideEnrichmentOptions={true}
-        apiEndpoint="/custom-sales-email"
+        apiEndpoint="/api/custom-sales-email"
       />
     </div>
   );
