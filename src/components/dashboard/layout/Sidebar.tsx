@@ -54,11 +54,7 @@ const personEnrichmentItems: NavItem[] = [
     label: "Person Mobile Phone",
   },
   { icon: <Users size={16} />, label: "Person LinkedIn URL" },
-  { icon: <Users size={16} />, label: "Person Job Title" },
   { icon: <Mail size={16} />, label: "Personal Email" },
-  { icon: <Users size={16} />, label: "Person Location" },
-  { icon: <Users size={16} />, label: "Person Education" },
-  { icon: <Users size={16} />, label: "Person Bio Summary" },
 ];
 
 const aiEnrichmentItems: NavItem[] = [
