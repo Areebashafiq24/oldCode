@@ -24,6 +24,8 @@ import AITools from "./components/pages/ai-tools";
 import ICPFitCheck from "./components/pages/icp-fit-check";
 import PainPointExtraction from "./components/pages/pain-point-extraction";
 import CompanyNameCleanup from "./components/pages/company-name-cleanup";
+import ColdEmailFirstLine from "./components/pages/cold-email-first-line";
+import CustomSalesEmail from "./components/pages/custom-sales-email";
 import RecentActivity from "./components/pages/recent-activity";
 import Settings from "./components/pages/settings";
 import Error404 from "./components/pages/error-404";
@@ -210,6 +212,22 @@ function AppRoutes() {
             element={
               <PrivateRoute>
                 <CompanyNameCleanup />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/cold-email-first-line"
+            element={
+              <PrivateRoute>
+                <ColdEmailFirstLine />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/custom-sales-email"
+            element={
+              <PrivateRoute>
+                <CustomSalesEmail />
               </PrivateRoute>
             }
           />
