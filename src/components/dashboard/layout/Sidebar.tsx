@@ -16,6 +16,7 @@ import {
   Brain,
   Target,
   PenTool,
+  MessageSquare,
 } from "lucide-react";
 import { useTheme } from "../../../App";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +65,11 @@ const aiEnrichmentItems: NavItem[] = [
   { icon: <Target size={16} />, label: "ICP Fit Check – Reason + Scoring" },
   { icon: <Brain size={16} />, label: "Pain Point Extraction" },
   { icon: <PenTool size={16} />, label: "Company Name Cleanup" },
+  {
+    icon: <MessageSquare size={16} />,
+    label: "Cold Email First Line Generator Write",
+  },
+  { icon: <Mail size={16} />, label: "Custom Sales Email Based on ICP" },
 ];
 
 const defaultBottomItems: NavItem[] = [
