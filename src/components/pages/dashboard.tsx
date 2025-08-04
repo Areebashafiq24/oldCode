@@ -5,6 +5,8 @@ import Sidebar from "../dashboard/layout/Sidebar";
 import ICPFitCheck from "./icp-fit-check";
 import PainPointExtraction from "./pain-point-extraction";
 import CompanyNameCleanup from "./company-name-cleanup";
+import ColdEmailFirstLine from "./cold-email-first-line";
+import CustomSalesEmail from "./custom-sales-email";
 import PersonWorkEmail from "./person-work-email";
 import PersonMobilePhone from "./person-mobile-phone";
 import { useTheme } from "../../App";
@@ -59,6 +61,12 @@ const Home = () => {
       case "Company Name Cleanup":
         setCurrentView("company-name-cleanup");
         break;
+      case "Cold Email First Line Generator Write":
+        setCurrentView("cold-email-first-line");
+        break;
+      case "Custom Sales Email Based on ICP":
+        setCurrentView("custom-sales-email");
+        break;
 
       default:
         break;
@@ -73,6 +81,10 @@ const Home = () => {
         return <PainPointExtraction />;
       case "company-name-cleanup":
         return <CompanyNameCleanup />;
+      case "cold-email-first-line":
+        return <ColdEmailFirstLine />;
+      case "custom-sales-email":
+        return <CustomSalesEmail />;
       case "person-work-email":
         return <PersonWorkEmail />;
       case "person-mobile-phone":
