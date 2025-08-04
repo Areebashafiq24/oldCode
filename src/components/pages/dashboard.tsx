@@ -9,6 +9,8 @@ import ColdEmailFirstLine from "./cold-email-first-line";
 import CustomSalesEmail from "./custom-sales-email";
 import PersonWorkEmail from "./person-work-email";
 import PersonMobilePhone from "./person-mobile-phone";
+import PersonLinkedInUrl from "./person-linkedin-url";
+import PersonPersonalEmail from "./person-personal-email";
 import { useTheme } from "../../App";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,12 +45,10 @@ const Home = () => {
         setCurrentView("person-mobile-phone");
         break;
       case "Person LinkedIn URL":
-      case "Person Job Title":
+        setCurrentView("person-linkedin-url");
+        break;
       case "Personal Email":
-      case "Person Location":
-      case "Person Education":
-      case "Person Bio Summary":
-        // Do nothing as requested
+        setCurrentView("person-personal-email");
         break;
 
       // AI Enrichment Services - open specific pages
@@ -89,6 +89,10 @@ const Home = () => {
         return <PersonWorkEmail />;
       case "person-mobile-phone":
         return <PersonMobilePhone />;
+      case "person-linkedin-url":
+        return <PersonLinkedInUrl />;
+      case "person-personal-email":
+        return <PersonPersonalEmail />;
       case "company-enrichment":
       default:
         return (
