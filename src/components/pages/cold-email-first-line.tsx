@@ -105,7 +105,7 @@ const ColdEmailFirstLine = ({ className = "" }: ColdEmailFirstLineProps) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         hideEnrichmentOptions={true}
-        apiEndpoint="/cold-email-first-line"
+        apiEndpoint="/api/cold-email-first-line"
       />
     </div>
   );
