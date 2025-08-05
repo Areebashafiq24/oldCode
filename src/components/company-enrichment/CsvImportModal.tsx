@@ -85,6 +85,16 @@ const CsvImportModal = ({
     perfectMatchKeywords: "",
   });
 
+  // Custom Sales Email questions state
+  const [salesEmailAnswers, setSalesEmailAnswers] = useState({
+    companyDescription: "",
+    whatYouSell: "",
+    whoYouSellTo: "",
+    whereYouSell: "",
+    companiesNotToSellTo: "",
+    uniqueValueProposition: "",
+  });
+
   const { isDark } = useTheme();
   const { toast } = useToast();
 
@@ -194,11 +204,18 @@ const CsvImportModal = ({
       ? Object.values(icpAnswers).every((answer) => answer.trim() !== "")
       : true;
 
+  // Check if Custom Sales Email questions are answered
+  const areSalesEmailQuestionsAnswered =
+    apiEndpoint === "/api/custom-sales-email"
+      ? Object.values(salesEmailAnswers).every((answer) => answer.trim() !== "")
+      : true;
+
   // Check if form is ready for submission
   const isFormReady =
     uploadedFile &&
     (hideEnrichmentOptions || isAnyToggleSelected) &&
-    areIcpQuestionsAnswered;
+    areIcpQuestionsAnswered &&
+    areSalesEmailQuestionsAnswered;
 
   const handleStartEnrichment = async () => {
     if (!csvData || !uploadedFile) {
@@ -251,6 +268,25 @@ const CsvImportModal = ({
         formData.append(
           "perfect_match_keywords",
           icpAnswers.perfectMatchKeywords,
+        );
+      }
+
+      // Add Custom Sales Email answers if this is Custom Sales Email
+      if (apiEndpoint === "/api/custom-sales-email") {
+        formData.append(
+          "company_description",
+          salesEmailAnswers.companyDescription,
+        );
+        formData.append("what_you_sell", salesEmailAnswers.whatYouSell);
+        formData.append("who_you_sell_to", salesEmailAnswers.whoYouSellTo);
+        formData.append("where_you_sell", salesEmailAnswers.whereYouSell);
+        formData.append(
+          "companies_not_to_sell_to",
+          salesEmailAnswers.companiesNotToSellTo,
+        );
+        formData.append(
+          "unique_value_proposition",
+          salesEmailAnswers.uniqueValueProposition,
         );
       }
 
@@ -348,6 +384,14 @@ const CsvImportModal = ({
       requiredTechnologies: "",
       exclusionCriteria: "",
       perfectMatchKeywords: "",
+    });
+    setSalesEmailAnswers({
+      companyDescription: "",
+      whatYouSell: "",
+      whoYouSellTo: "",
+      whereYouSell: "",
+      companiesNotToSellTo: "",
+      uniqueValueProposition: "",
     });
   };
 
@@ -791,6 +835,184 @@ const CsvImportModal = ({
                         >
                           Please answer all questions to continue with the ICP
                           fit analysis.
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Custom Sales Email Questions Section - Only show for Custom Sales Email */}
+              {apiEndpoint === "/api/custom-sales-email" && csvData && (
+                <Card
+                  className={
+                    isDark ? "bg-gray-800 border-gray-700" : "bg-white"
+                  }
+                >
+                  <CardContent className="p-6">
+                    <h4
+                      className={`font-semibold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
+                    >
+                      Sales Email Questions
+                    </h4>
+                    <p
+                      className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} mb-6`}
+                    >
+                      Please answer these questions to help us create
+                      personalized sales emails based on your company profile.
+                    </p>
+
+                    <div className="space-y-6 max-h-96 overflow-y-auto pr-2">
+                      {/* Question 1: What does your company do */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="company-description"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          What does your company do (SaaS, services, products)?
+                        </Label>
+                        <Textarea
+                          id="company-description"
+                          placeholder="Describe what your company does..."
+                          value={salesEmailAnswers.companyDescription}
+                          onChange={(e) =>
+                            setSalesEmailAnswers((prev) => ({
+                              ...prev,
+                              companyDescription: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 2: What do you sell specifically */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="what-you-sell"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          What do you sell specifically?
+                        </Label>
+                        <Textarea
+                          id="what-you-sell"
+                          placeholder="Describe what you sell specifically..."
+                          value={salesEmailAnswers.whatYouSell}
+                          onChange={(e) =>
+                            setSalesEmailAnswers((prev) => ({
+                              ...prev,
+                              whatYouSell: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 3: Who do you sell to */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="who-you-sell-to"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          Who do you sell to (industries, job titles, company
+                          sizes)?
+                        </Label>
+                        <Textarea
+                          id="who-you-sell-to"
+                          placeholder="Describe your target customers..."
+                          value={salesEmailAnswers.whoYouSellTo}
+                          onChange={(e) =>
+                            setSalesEmailAnswers((prev) => ({
+                              ...prev,
+                              whoYouSellTo: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 4: Where do you sell */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="where-you-sell"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          Where do you sell (geography, if applicable)?
+                        </Label>
+                        <Textarea
+                          id="where-you-sell"
+                          placeholder="Enter your target geography or regions..."
+                          value={salesEmailAnswers.whereYouSell}
+                          onChange={(e) =>
+                            setSalesEmailAnswers((prev) => ({
+                              ...prev,
+                              whereYouSell: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 5: Companies you do NOT sell to */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="companies-not-to-sell-to"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          Are there any companies you absolutely do NOT sell to?
+                        </Label>
+                        <Textarea
+                          id="companies-not-to-sell-to"
+                          placeholder="Enter companies or types you don't sell to..."
+                          value={salesEmailAnswers.companiesNotToSellTo}
+                          onChange={(e) =>
+                            setSalesEmailAnswers((prev) => ({
+                              ...prev,
+                              companiesNotToSellTo: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 6: Unique value proposition */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="unique-value-proposition"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          What is your unique value proposition for solving
+                          client pain points?
+                        </Label>
+                        <Textarea
+                          id="unique-value-proposition"
+                          placeholder="Describe your unique value proposition..."
+                          value={salesEmailAnswers.uniqueValueProposition}
+                          onChange={(e) =>
+                            setSalesEmailAnswers((prev) => ({
+                              ...prev,
+                              uniqueValueProposition: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+                    </div>
+
+                    {!areSalesEmailQuestionsAnswered && csvData && (
+                      <div
+                        className={`mt-6 p-3 rounded-lg ${isDark ? "bg-yellow-900/20" : "bg-yellow-50"}`}
+                      >
+                        <p
+                          className={`text-sm ${isDark ? "text-yellow-300" : "text-yellow-700"}`}
+                        >
+                          Please answer all questions to continue with the
+                          custom sales email generation.
                         </p>
                       </div>
                     )}
