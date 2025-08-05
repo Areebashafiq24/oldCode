@@ -82,6 +82,7 @@ const CsvImportModal = ({
     targetGeography: "",
     requiredTechnologies: "",
     exclusionCriteria: "",
+    perfectMatchKeywords: "",
   });
 
   const { isDark } = useTheme();
@@ -247,6 +248,10 @@ const CsvImportModal = ({
           icpAnswers.requiredTechnologies,
         );
         formData.append("exclusion_criteria", icpAnswers.exclusionCriteria);
+        formData.append(
+          "perfect_match_keywords",
+          icpAnswers.perfectMatchKeywords,
+        );
       }
 
       const response = await fetch(`http://localhost:8000${apiEndpoint}`, {
@@ -342,6 +347,7 @@ const CsvImportModal = ({
       targetGeography: "",
       requiredTechnologies: "",
       exclusionCriteria: "",
+      perfectMatchKeywords: "",
     });
   };
 
@@ -610,7 +616,7 @@ const CsvImportModal = ({
             </div>
 
             {/* Action Section */}
-            <div className="space-y-6">
+            <div className="space-y-6 overflow-auto">
               {/* ICP Questions Section - Only show for ICP Fit Check */}
               {apiEndpoint === "/icp-fit-check" && csvData && (
                 <Card
@@ -631,7 +637,7 @@ const CsvImportModal = ({
                       prospects against your Ideal Customer Profile.
                     </p>
 
-                    <div className="space-y-6">
+                    <div className="space-y-6 max-h-96 overflow-y-auto pr-2">
                       {/* Question 1: Target Industries */}
                       <div className="space-y-2">
                         <Label
@@ -744,6 +750,30 @@ const CsvImportModal = ({
                             setIcpAnswers((prev) => ({
                               ...prev,
                               exclusionCriteria: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 6: Perfect Match Keywords */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="perfect-match-keywords"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          Are there any specific keywords or traits that
+                          indicate a perfect match?
+                        </Label>
+                        <Textarea
+                          id="perfect-match-keywords"
+                          placeholder="Enter keywords or traits that indicate a perfect match..."
+                          value={icpAnswers.perfectMatchKeywords}
+                          onChange={(e) =>
+                            setIcpAnswers((prev) => ({
+                              ...prev,
+                              perfectMatchKeywords: e.target.value,
                             }))
                           }
                           className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
