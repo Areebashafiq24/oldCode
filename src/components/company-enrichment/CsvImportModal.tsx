@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -72,6 +74,15 @@ const CsvImportModal = ({
   const [companyNewsSummary, setCompanyNewsSummary] = useState(false);
   const [companyLinkedinUrlFinder, setCompanyLinkedinUrlFinder] =
     useState(false);
+
+  // ICP Fit Check questions state
+  const [icpAnswers, setIcpAnswers] = useState({
+    targetIndustries: "",
+    companySizes: "",
+    targetGeography: "",
+    requiredTechnologies: "",
+    exclusionCriteria: "",
+  });
 
   const { isDark } = useTheme();
   const { toast } = useToast();
@@ -176,9 +187,17 @@ const CsvImportModal = ({
     companyNewsSummary ||
     companyLinkedinUrlFinder;
 
+  // Check if ICP questions are answered (for ICP Fit Check)
+  const areIcpQuestionsAnswered =
+    apiEndpoint === "/icp-fit-check"
+      ? Object.values(icpAnswers).every((answer) => answer.trim() !== "")
+      : true;
+
   // Check if form is ready for submission
   const isFormReady =
-    uploadedFile && (hideEnrichmentOptions || isAnyToggleSelected);
+    uploadedFile &&
+    (hideEnrichmentOptions || isAnyToggleSelected) &&
+    areIcpQuestionsAnswered;
 
   const handleStartEnrichment = async () => {
     if (!csvData || !uploadedFile) {
@@ -217,6 +236,18 @@ const CsvImportModal = ({
         "company_linkedin_url_finder",
         companyLinkedinUrlFinder.toString(),
       );
+
+      // Add ICP answers if this is ICP Fit Check
+      if (apiEndpoint === "/icp-fit-check") {
+        formData.append("target_industries", icpAnswers.targetIndustries);
+        formData.append("company_sizes", icpAnswers.companySizes);
+        formData.append("target_geography", icpAnswers.targetGeography);
+        formData.append(
+          "required_technologies",
+          icpAnswers.requiredTechnologies,
+        );
+        formData.append("exclusion_criteria", icpAnswers.exclusionCriteria);
+      }
 
       const response = await fetch(`http://localhost:8000${apiEndpoint}`, {
         method: "POST",
@@ -305,6 +336,13 @@ const CsvImportModal = ({
     setCompanyDescription(false);
     setCompanyNewsSummary(false);
     setCompanyLinkedinUrlFinder(false);
+    setIcpAnswers({
+      targetIndustries: "",
+      companySizes: "",
+      targetGeography: "",
+      requiredTechnologies: "",
+      exclusionCriteria: "",
+    });
   };
 
   const handleClose = () => {
@@ -573,6 +611,162 @@ const CsvImportModal = ({
 
             {/* Action Section */}
             <div className="space-y-6">
+              {/* ICP Questions Section - Only show for ICP Fit Check */}
+              {apiEndpoint === "/icp-fit-check" && csvData && (
+                <Card
+                  className={
+                    isDark ? "bg-gray-800 border-gray-700" : "bg-white"
+                  }
+                >
+                  <CardContent className="p-6">
+                    <h4
+                      className={`font-semibold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}
+                    >
+                      ICP Fit Questions
+                    </h4>
+                    <p
+                      className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"} mb-6`}
+                    >
+                      Please answer these questions to help us analyze your
+                      prospects against your Ideal Customer Profile.
+                    </p>
+
+                    <div className="space-y-6">
+                      {/* Question 1: Target Industries */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="target-industries"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          What are your target industries (e.g., SaaS,
+                          logistics, finance)?
+                        </Label>
+                        <Textarea
+                          id="target-industries"
+                          placeholder="Enter your target industries..."
+                          value={icpAnswers.targetIndustries}
+                          onChange={(e) =>
+                            setIcpAnswers((prev) => ({
+                              ...prev,
+                              targetIndustries: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 2: Company Sizes */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="company-sizes"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          What company sizes do you sell to (SMB, mid-market,
+                          enterprise)?
+                        </Label>
+                        <Textarea
+                          id="company-sizes"
+                          placeholder="Enter your target company sizes..."
+                          value={icpAnswers.companySizes}
+                          onChange={(e) =>
+                            setIcpAnswers((prev) => ({
+                              ...prev,
+                              companySizes: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 3: Target Geography */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="target-geography"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          What is your target geography or region?
+                        </Label>
+                        <Textarea
+                          id="target-geography"
+                          placeholder="Enter your target geography or region..."
+                          value={icpAnswers.targetGeography}
+                          onChange={(e) =>
+                            setIcpAnswers((prev) => ({
+                              ...prev,
+                              targetGeography: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 4: Required Technologies */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="required-technologies"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          What technologies, solutions, or offerings should
+                          prospects have to be a good fit?
+                        </Label>
+                        <Textarea
+                          id="required-technologies"
+                          placeholder="Enter required technologies or solutions..."
+                          value={icpAnswers.requiredTechnologies}
+                          onChange={(e) =>
+                            setIcpAnswers((prev) => ({
+                              ...prev,
+                              requiredTechnologies: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+
+                      {/* Question 5: Exclusion Criteria */}
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="exclusion-criteria"
+                          className={`text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`}
+                        >
+                          Are there any exclusion criteria (industries, company
+                          types, or geographies you do NOT sell to)?
+                        </Label>
+                        <Textarea
+                          id="exclusion-criteria"
+                          placeholder="Enter exclusion criteria..."
+                          value={icpAnswers.exclusionCriteria}
+                          onChange={(e) =>
+                            setIcpAnswers((prev) => ({
+                              ...prev,
+                              exclusionCriteria: e.target.value,
+                            }))
+                          }
+                          className={`min-h-[80px] ${isDark ? "bg-gray-700 border-gray-600 text-white placeholder:text-gray-400" : "bg-white border-gray-300"}`}
+                          disabled={isProcessing}
+                        />
+                      </div>
+                    </div>
+
+                    {!areIcpQuestionsAnswered && csvData && (
+                      <div
+                        className={`mt-6 p-3 rounded-lg ${isDark ? "bg-yellow-900/20" : "bg-yellow-50"}`}
+                      >
+                        <p
+                          className={`text-sm ${isDark ? "text-yellow-300" : "text-yellow-700"}`}
+                        >
+                          Please answer all questions to continue with the ICP
+                          fit analysis.
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
               {/* Enrichment Options */}
               {!hideEnrichmentOptions && (
                 <Card
