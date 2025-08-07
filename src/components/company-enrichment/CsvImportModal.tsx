@@ -121,9 +121,64 @@ const CsvImportModal = ({
       const reader = new FileReader();
       reader.onload = (e) => {
         const text = e.target?.result as string;
-        const lines = text.split("\n").filter((line) => line.trim());
 
-        if (lines.length === 0) {
+        // Proper CSV parsing function
+        const parseCSV = (csvText: string) => {
+          const result = [];
+          let current = "";
+          let inQuotes = false;
+          let row = [];
+
+          for (let i = 0; i < csvText.length; i++) {
+            const char = csvText[i];
+            const nextChar = csvText[i + 1];
+
+            if (char === '"') {
+              if (inQuotes && nextChar === '"') {
+                // Escaped quote
+                current += '"';
+                i++; // Skip next quote
+              } else {
+                // Toggle quote state
+                inQuotes = !inQuotes;
+              }
+            } else if (char === "," && !inQuotes) {
+              // End of field
+              row.push(current.trim());
+              current = "";
+            } else if ((char === "\n" || char === "\r") && !inQuotes) {
+              // End of row
+              if (current.trim() || row.length > 0) {
+                row.push(current.trim());
+                if (row.some((cell) => cell.length > 0)) {
+                  result.push(row);
+                }
+                row = [];
+                current = "";
+              }
+              // Skip \r\n combinations
+              if (char === "\r" && nextChar === "\n") {
+                i++;
+              }
+            } else {
+              current += char;
+            }
+          }
+
+          // Handle last field/row
+          if (current.trim() || row.length > 0) {
+            row.push(current.trim());
+            if (row.some((cell) => cell.length > 0)) {
+              result.push(row);
+            }
+          }
+
+          return result;
+        };
+
+        const parsedData = parseCSV(text);
+
+        if (parsedData.length === 0) {
           toast({
             title: "Empty file",
             description: "The CSV file appears to be empty",
@@ -132,19 +187,13 @@ const CsvImportModal = ({
           return;
         }
 
-        const headers = lines[0]
-          .split(",")
-          .map((h) => h.trim().replace(/"/g, ""));
-        const rows = lines
-          .slice(1, 11)
-          .map((line) =>
-            line.split(",").map((cell) => cell.trim().replace(/"/g, "")),
-          );
+        const headers = parsedData[0];
+        const rows = parsedData.slice(1, 11); // Show first 10 rows
 
         setCsvData({
           headers,
           rows,
-          totalRows: lines.length - 1,
+          totalRows: parsedData.length - 1,
           totalColumns: headers.length,
         });
 
@@ -153,7 +202,7 @@ const CsvImportModal = ({
 
         toast({
           title: "File uploaded successfully",
-          description: `Loaded ${lines.length - 1} rows with ${headers.length} columns`,
+          description: `Loaded ${parsedData.length - 1} rows with ${headers.length} columns`,
         });
       };
       reader.readAsText(file);
@@ -301,27 +350,74 @@ const CsvImportModal = ({
 
       const enrichedBlob = await response.blob();
       const enrichedText = await enrichedBlob.text();
-      const enrichedLines = enrichedText
-        .split("\n")
-        .filter((line) => line.trim());
 
-      if (enrichedLines.length === 0) {
+      // Use the same CSV parsing function for enriched data
+      const parseCSV = (csvText: string) => {
+        const result = [];
+        let current = "";
+        let inQuotes = false;
+        let row = [];
+
+        for (let i = 0; i < csvText.length; i++) {
+          const char = csvText[i];
+          const nextChar = csvText[i + 1];
+
+          if (char === '"') {
+            if (inQuotes && nextChar === '"') {
+              // Escaped quote
+              current += '"';
+              i++; // Skip next quote
+            } else {
+              // Toggle quote state
+              inQuotes = !inQuotes;
+            }
+          } else if (char === "," && !inQuotes) {
+            // End of field
+            row.push(current.trim());
+            current = "";
+          } else if ((char === "\n" || char === "\r") && !inQuotes) {
+            // End of row
+            if (current.trim() || row.length > 0) {
+              row.push(current.trim());
+              if (row.some((cell) => cell.length > 0)) {
+                result.push(row);
+              }
+              row = [];
+              current = "";
+            }
+            // Skip \r\n combinations
+            if (char === "\r" && nextChar === "\n") {
+              i++;
+            }
+          } else {
+            current += char;
+          }
+        }
+
+        // Handle last field/row
+        if (current.trim() || row.length > 0) {
+          row.push(current.trim());
+          if (row.some((cell) => cell.length > 0)) {
+            result.push(row);
+          }
+        }
+
+        return result;
+      };
+
+      const enrichedParsedData = parseCSV(enrichedText);
+
+      if (enrichedParsedData.length === 0) {
         throw new Error("Enriched file appears to be empty");
       }
 
-      const enrichedHeaders = enrichedLines[0]
-        .split(",")
-        .map((h) => h.trim().replace(/"/g, ""));
-      const enrichedRows = enrichedLines
-        .slice(1, 11) // Show first 10 rows for preview
-        .map((line) =>
-          line.split(",").map((cell) => cell.trim().replace(/"/g, "")),
-        );
+      const enrichedHeaders = enrichedParsedData[0];
+      const enrichedRows = enrichedParsedData.slice(1, 11); // Show first 10 rows for preview
 
       setEnrichedData({
         headers: enrichedHeaders,
         rows: enrichedRows,
-        totalRows: enrichedLines.length - 1,
+        totalRows: enrichedParsedData.length - 1,
         totalColumns: enrichedHeaders.length,
         blob: enrichedBlob,
       });
@@ -607,56 +703,61 @@ const CsvImportModal = ({
                                   >
                                     {row.map((cell, cellIndex) => {
                                       const cellContent = cell || "-";
+                                      const headerName =
+                                        (enrichedData || csvData).headers[
+                                          cellIndex
+                                        ]?.toLowerCase() || "";
                                       const isEmailBody =
-                                        (enrichedData || csvData).headers[
-                                          cellIndex
-                                        ]
-                                          ?.toLowerCase()
-                                          .includes("email") ||
-                                        (enrichedData || csvData).headers[
-                                          cellIndex
-                                        ]
-                                          ?.toLowerCase()
-                                          .includes("body") ||
-                                        (enrichedData || csvData).headers[
-                                          cellIndex
-                                        ]
-                                          ?.toLowerCase()
-                                          .includes("message") ||
-                                        (enrichedData || csvData).headers[
-                                          cellIndex
-                                        ]
-                                          ?.toLowerCase()
-                                          .includes("content");
+                                        headerName.includes("email") ||
+                                        headerName.includes("body") ||
+                                        headerName.includes("message") ||
+                                        headerName.includes("content") ||
+                                        headerName.includes("description") ||
+                                        headerName.includes("summary");
                                       const isLongContent =
-                                        cellContent.length > 50;
+                                        cellContent.length > 100;
+                                      const hasMultipleLines =
+                                        cellContent.includes("\n") ||
+                                        cellContent.includes("\r");
+                                      const shouldUseScrollableCell =
+                                        isEmailBody ||
+                                        isLongContent ||
+                                        hasMultipleLines;
 
                                       return (
                                         <td
                                           key={cellIndex}
-                                          className={`px-4 py-4 text-sm align-top ${isDark ? "text-gray-300" : "text-gray-700"} border-b ${isDark ? "border-gray-700" : "border-gray-200"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
+                                          className={`px-3 py-3 text-sm align-top ${isDark ? "text-gray-300" : "text-gray-700"} border-b ${isDark ? "border-gray-700" : "border-gray-200"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0 relative`}
                                           style={{
-                                            minWidth: "150px",
-                                            maxWidth:
-                                              isEmailBody || isLongContent
-                                                ? "400px"
-                                                : "300px",
-                                            wordBreak: "break-word",
+                                            minWidth: "120px",
+                                            maxWidth: shouldUseScrollableCell
+                                              ? "350px"
+                                              : "250px",
+                                            width: shouldUseScrollableCell
+                                              ? "350px"
+                                              : "auto",
                                           }}
                                         >
                                           <div
                                             className={`leading-relaxed ${
-                                              isEmailBody || isLongContent
-                                                ? "whitespace-pre-wrap max-h-32 overflow-y-auto pr-2"
-                                                : "whitespace-normal"
+                                              shouldUseScrollableCell
+                                                ? "max-h-24 overflow-y-auto whitespace-pre-wrap break-words pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
+                                                : "whitespace-normal break-words"
                                             }`}
                                             style={{
                                               wordWrap: "break-word",
                                               overflowWrap: "break-word",
                                               hyphens: "auto",
+                                              fontSize: shouldUseScrollableCell
+                                                ? "0.8rem"
+                                                : "0.875rem",
+                                              lineHeight:
+                                                shouldUseScrollableCell
+                                                  ? "1.3"
+                                                  : "1.5",
                                             }}
                                             title={
-                                              cellContent.length > 100
+                                              cellContent.length > 50
                                                 ? cellContent
                                                 : undefined
                                             }
