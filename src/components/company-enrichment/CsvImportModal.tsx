@@ -571,57 +571,96 @@ const CsvImportModal = ({
                         </div>
                       </div>
                       <div className="relative">
-                        {/* Fixed Header Container */}
-                        <div
-                          className={`sticky top-0 z-10 ${isDark ? "bg-gray-800" : "bg-white"} border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
-                        >
-                          <div className="overflow-x-auto">
-                            <table className="w-full min-w-max">
-                              <thead>
-                                <tr>
-                                  {(enrichedData || csvData).headers.map(
-                                    (header, index) => (
-                                      <th
-                                        key={index}
-                                        className={`px-4 py-3 text-left text-sm font-semibold whitespace-nowrap min-w-[120px] max-w-[200px] ${isDark ? "text-gray-200 bg-gray-800" : "text-gray-700 bg-gray-50"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
-                                        title={header}
-                                      >
-                                        <div className="truncate">{header}</div>
-                                      </th>
-                                    ),
-                                  )}
-                                </tr>
-                              </thead>
-                            </table>
-                          </div>
-                        </div>
-
-                        {/* Scrollable Body Container */}
-                        <div className="overflow-auto max-h-80">
-                          <table className="w-full min-w-max">
+                        {/* Enhanced Data Table with Better Formatting */}
+                        <div className="overflow-auto max-h-96 border rounded-lg">
+                          <table
+                            className={`w-full table-auto ${isDark ? "bg-gray-800" : "bg-white"}`}
+                          >
+                            <thead
+                              className={`sticky top-0 z-10 ${isDark ? "bg-gray-900" : "bg-gray-100"}`}
+                            >
+                              <tr>
+                                {(enrichedData || csvData).headers.map(
+                                  (header, index) => (
+                                    <th
+                                      key={index}
+                                      className={`px-4 py-4 text-left text-sm font-semibold ${isDark ? "text-gray-200" : "text-gray-700"} border-b-2 ${isDark ? "border-gray-600" : "border-gray-300"} border-r ${isDark ? "border-gray-600" : "border-gray-300"} last:border-r-0 min-w-[150px]`}
+                                      style={{
+                                        minWidth: "150px",
+                                        maxWidth: "none",
+                                      }}
+                                    >
+                                      <div className="font-medium leading-tight">
+                                        {header}
+                                      </div>
+                                    </th>
+                                  ),
+                                )}
+                              </tr>
+                            </thead>
                             <tbody>
                               {(enrichedData || csvData).rows.map(
                                 (row, rowIndex) => (
                                   <tr
                                     key={rowIndex}
-                                    className={`border-b ${isDark ? "border-gray-700 hover:bg-gray-700/30" : "border-gray-200 hover:bg-gray-50"} transition-colors`}
+                                    className={`${isDark ? "hover:bg-gray-700/50" : "hover:bg-gray-50"} transition-colors ${rowIndex % 2 === 0 ? (isDark ? "bg-gray-800/50" : "bg-gray-50/30") : ""}`}
                                   >
                                     {row.map((cell, cellIndex) => {
                                       const cellContent = cell || "-";
+                                      const isEmailBody =
+                                        (enrichedData || csvData).headers[
+                                          cellIndex
+                                        ]
+                                          ?.toLowerCase()
+                                          .includes("email") ||
+                                        (enrichedData || csvData).headers[
+                                          cellIndex
+                                        ]
+                                          ?.toLowerCase()
+                                          .includes("body") ||
+                                        (enrichedData || csvData).headers[
+                                          cellIndex
+                                        ]
+                                          ?.toLowerCase()
+                                          .includes("message") ||
+                                        (enrichedData || csvData).headers[
+                                          cellIndex
+                                        ]
+                                          ?.toLowerCase()
+                                          .includes("content");
                                       const isLongContent =
-                                        cellContent.length > 30;
+                                        cellContent.length > 50;
 
                                       return (
                                         <td
                                           key={cellIndex}
-                                          className={`px-4 py-3 text-sm whitespace-nowrap min-w-[120px] max-w-[200px] ${isDark ? "text-gray-300" : "text-gray-600"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
-                                          title={
-                                            isLongContent
-                                              ? cellContent
-                                              : undefined
-                                          }
+                                          className={`px-4 py-4 text-sm align-top ${isDark ? "text-gray-300" : "text-gray-700"} border-b ${isDark ? "border-gray-700" : "border-gray-200"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
+                                          style={{
+                                            minWidth: "150px",
+                                            maxWidth:
+                                              isEmailBody || isLongContent
+                                                ? "400px"
+                                                : "300px",
+                                            wordBreak: "break-word",
+                                          }}
                                         >
-                                          <div className="truncate">
+                                          <div
+                                            className={`leading-relaxed ${
+                                              isEmailBody || isLongContent
+                                                ? "whitespace-pre-wrap max-h-32 overflow-y-auto pr-2"
+                                                : "whitespace-normal"
+                                            }`}
+                                            style={{
+                                              wordWrap: "break-word",
+                                              overflowWrap: "break-word",
+                                              hyphens: "auto",
+                                            }}
+                                            title={
+                                              cellContent.length > 100
+                                                ? cellContent
+                                                : undefined
+                                            }
+                                          >
                                             {cellContent}
                                           </div>
                                         </td>
