@@ -98,6 +98,10 @@ const CsvImportModal = ({
   const { isDark } = useTheme();
   const { toast } = useToast();
 
+  // Debug logging
+  console.log("CsvImportModal render - csvData:", csvData);
+  console.log("CsvImportModal render - enrichedData:", enrichedData);
+
   const handleFileUpload = useCallback(
     (file: File) => {
       if (!file.name.endsWith(".csv")) {
@@ -123,6 +127,9 @@ const CsvImportModal = ({
         const text = e.target?.result as string;
         const lines = text.split("\n").filter((line) => line.trim());
 
+        console.log("File upload - Total lines:", lines.length);
+        console.log("File upload - First few lines:", lines.slice(0, 3));
+
         if (lines.length === 0) {
           toast({
             title: "Empty file",
@@ -132,22 +139,44 @@ const CsvImportModal = ({
           return;
         }
 
-        const headers = lines[0]
-          .split(",")
-          .map((h) => h.trim().replace(/"/g, ""));
-        const rows = lines
-          .slice(1, 11)
-          .map((line) =>
-            line.split(",").map((cell) => cell.trim().replace(/"/g, "")),
-          );
+        // Simple CSV parsing - handle quoted fields
+        const parseCSVLine = (line: string): string[] => {
+          const result: string[] = [];
+          let current = "";
+          let inQuotes = false;
 
-        setCsvData({
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === "," && !inQuotes) {
+              result.push(current.trim());
+              current = "";
+            } else {
+              current += char;
+            }
+          }
+
+          result.push(current.trim());
+          return result;
+        };
+
+        const headers = parseCSVLine(lines[0]);
+        const rows = lines.slice(1, 11).map((line) => parseCSVLine(line));
+
+        const csvDataObject = {
           headers,
           rows,
           totalRows: lines.length - 1,
           totalColumns: headers.length,
-        });
+        };
 
+        console.log("CSV Data Object:", csvDataObject);
+        console.log("Headers:", headers);
+        console.log("Sample rows:", rows.slice(0, 2));
+
+        setCsvData(csvDataObject);
         setUploadedFile(file);
         setEnrichedData(null); // Reset enriched data when new file is uploaded
 
