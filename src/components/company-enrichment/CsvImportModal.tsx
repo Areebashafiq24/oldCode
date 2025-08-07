@@ -124,67 +124,86 @@ const CsvImportModal = ({
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        const text = e.target?.result as string;
-        const lines = text.split("\n").filter((line) => line.trim());
+        try {
+          const text = e.target?.result as string;
+          const lines = text.split("\n").filter((line) => line.trim());
 
-        console.log("File upload - Total lines:", lines.length);
-        console.log("File upload - First few lines:", lines.slice(0, 3));
+          console.log("File upload - Total lines:", lines.length);
+          console.log("File upload - First few lines:", lines.slice(0, 3));
 
-        if (lines.length === 0) {
-          toast({
-            title: "Empty file",
-            description: "The CSV file appears to be empty",
-            variant: "destructive",
-          });
-          return;
-        }
-
-        // Simple CSV parsing - handle quoted fields
-        const parseCSVLine = (line: string): string[] => {
-          const result: string[] = [];
-          let current = "";
-          let inQuotes = false;
-
-          for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-
-            if (char === '"') {
-              inQuotes = !inQuotes;
-            } else if (char === "," && !inQuotes) {
-              result.push(current.trim());
-              current = "";
-            } else {
-              current += char;
-            }
+          if (lines.length === 0) {
+            toast({
+              title: "Empty file",
+              description: "The CSV file appears to be empty",
+              variant: "destructive",
+            });
+            return;
           }
 
-          result.push(current.trim());
-          return result;
-        };
+          // Simple CSV parsing - handle quoted fields
+          const parseCSVLine = (line: string): string[] => {
+            const result: string[] = [];
+            let current = "";
+            let inQuotes = false;
 
-        const headers = parseCSVLine(lines[0]);
-        const rows = lines.slice(1, 11).map((line) => parseCSVLine(line));
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
 
-        const csvDataObject = {
-          headers,
-          rows,
-          totalRows: lines.length - 1,
-          totalColumns: headers.length,
-        };
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === "," && !inQuotes) {
+                result.push(current.trim());
+                current = "";
+              } else {
+                current += char;
+              }
+            }
 
-        console.log("CSV Data Object:", csvDataObject);
-        console.log("Headers:", headers);
-        console.log("Sample rows:", rows.slice(0, 2));
+            result.push(current.trim());
+            return result;
+          };
 
-        setCsvData(csvDataObject);
-        setUploadedFile(file);
-        setEnrichedData(null); // Reset enriched data when new file is uploaded
+          const headers = parseCSVLine(lines[0]);
+          const rows = lines.slice(1, 11).map((line) => parseCSVLine(line));
 
+          const csvDataObject = {
+            headers,
+            rows,
+            totalRows: lines.length - 1,
+            totalColumns: headers.length,
+          };
+
+          console.log("CSV Data Object:", csvDataObject);
+          console.log("Headers:", headers);
+          console.log("Sample rows:", rows.slice(0, 2));
+
+          setCsvData(csvDataObject);
+          setUploadedFile(file);
+          setEnrichedData(null); // Reset enriched data when new file is uploaded
+
+          toast({
+            title: "File uploaded successfully",
+            description: `Loaded ${lines.length - 1} rows with ${headers.length} columns`,
+          });
+        } catch (error) {
+          console.error("Error parsing CSV file:", error);
+          toast({
+            title: "Error parsing file",
+            description:
+              "There was an error reading the CSV file. Please check the file format.",
+            variant: "destructive",
+          });
+        }
+      };
+
+      reader.onerror = () => {
         toast({
-          title: "File uploaded successfully",
-          description: `Loaded ${lines.length - 1} rows with ${headers.length} columns`,
+          title: "File read error",
+          description: "There was an error reading the file. Please try again.",
+          variant: "destructive",
         });
       };
+
       reader.readAsText(file);
     },
     [toast],
@@ -193,6 +212,7 @@ const CsvImportModal = ({
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+      e.stopPropagation();
       setIsDragOver(false);
 
       const files = Array.from(e.dataTransfer.files);
@@ -205,19 +225,24 @@ const CsvImportModal = ({
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragOver(true);
   }, []);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragOver(false);
   }, []);
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const files = e.target.files;
     if (files && files.length > 0) {
       handleFileUpload(files[0]);
     }
+    // Reset the input value to allow re-uploading the same file
+    e.target.value = "";
   };
 
   // Check if at least one toggle is selected
