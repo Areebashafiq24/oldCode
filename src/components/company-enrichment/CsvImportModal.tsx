@@ -571,92 +571,58 @@ const CsvImportModal = ({
                         </div>
                       </div>
                       <div className="relative">
-                        {/* Responsive Table Container */}
-                        <div className="overflow-x-auto border rounded-lg">
-                          <table className="w-full table-auto border-collapse">
-                            {/* Table Header */}
-                            <thead
-                              className={`sticky top-0 z-10 ${isDark ? "bg-gray-800" : "bg-gray-50"}`}
-                            >
-                              <tr>
-                                {(enrichedData || csvData).headers.map(
-                                  (header, index) => (
-                                    <th
-                                      key={index}
-                                      className={`px-4 py-3 text-left text-sm font-semibold border-b-2 ${isDark ? "text-gray-200 bg-gray-800 border-gray-600" : "text-gray-700 bg-gray-50 border-gray-300"} ${index !== (enrichedData || csvData).headers.length - 1 ? `border-r ${isDark ? "border-gray-600" : "border-gray-300"}` : ""}`}
-                                      style={{ minWidth: "150px" }}
-                                    >
-                                      <div className="font-medium break-words">
-                                        {header}
-                                      </div>
-                                    </th>
-                                  ),
-                                )}
-                              </tr>
-                            </thead>
+                        {/* Fixed Header Container */}
+                        <div
+                          className={`sticky top-0 z-10 ${isDark ? "bg-gray-800" : "bg-white"} border-b ${isDark ? "border-gray-700" : "border-gray-200"}`}
+                        >
+                          <div className="overflow-x-auto">
+                            <table className="w-full min-w-max">
+                              <thead>
+                                <tr>
+                                  {(enrichedData || csvData).headers.map(
+                                    (header, index) => (
+                                      <th
+                                        key={index}
+                                        className={`px-4 py-3 text-left text-sm font-semibold whitespace-nowrap min-w-[120px] max-w-[200px] ${isDark ? "text-gray-200 bg-gray-800" : "text-gray-700 bg-gray-50"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
+                                        title={header}
+                                      >
+                                        <div className="truncate">{header}</div>
+                                      </th>
+                                    ),
+                                  )}
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
+                        </div>
 
-                            {/* Table Body */}
+                        {/* Scrollable Body Container */}
+                        <div className="overflow-auto max-h-80">
+                          <table className="w-full min-w-max">
                             <tbody>
                               {(enrichedData || csvData).rows.map(
                                 (row, rowIndex) => (
                                   <tr
                                     key={rowIndex}
-                                    className={`${isDark ? "hover:bg-gray-700/30" : "hover:bg-gray-50"} transition-colors ${rowIndex !== (enrichedData || csvData).rows.length - 1 ? `border-b ${isDark ? "border-gray-700" : "border-gray-200"}` : ""}`}
+                                    className={`border-b ${isDark ? "border-gray-700 hover:bg-gray-700/30" : "border-gray-200 hover:bg-gray-50"} transition-colors`}
                                   >
                                     {row.map((cell, cellIndex) => {
                                       const cellContent = cell || "-";
                                       const isLongContent =
-                                        cellContent.length > 50;
-                                      const [isExpanded, setIsExpanded] =
-                                        React.useState(false);
+                                        cellContent.length > 30;
 
                                       return (
                                         <td
                                           key={cellIndex}
-                                          className={`px-4 py-3 text-sm align-top ${isDark ? "text-gray-300" : "text-gray-600"} ${cellIndex !== row.length - 1 ? `border-r ${isDark ? "border-gray-700" : "border-gray-200"}` : ""}`}
-                                          style={{
-                                            minWidth: "150px",
-                                            maxWidth: "300px",
-                                          }}
+                                          className={`px-4 py-3 text-sm whitespace-nowrap min-w-[120px] max-w-[200px] ${isDark ? "text-gray-300" : "text-gray-600"} border-r ${isDark ? "border-gray-700" : "border-gray-200"} last:border-r-0`}
+                                          title={
+                                            isLongContent
+                                              ? cellContent
+                                              : undefined
+                                          }
                                         >
-                                          <div className="relative">
-                                            {isLongContent ? (
-                                              <div>
-                                                <div
-                                                  className={`break-words whitespace-pre-wrap leading-relaxed ${
-                                                    isExpanded
-                                                      ? ""
-                                                      : "line-clamp-3"
-                                                  }`}
-                                                  style={{
-                                                    display: "-webkit-box",
-                                                    WebkitLineClamp: isExpanded
-                                                      ? "unset"
-                                                      : 3,
-                                                    WebkitBoxOrient: "vertical",
-                                                    overflow: isExpanded
-                                                      ? "visible"
-                                                      : "hidden",
-                                                  }}
-                                                >
-                                                  {cellContent}
-                                                </div>
-                                                <button
-                                                  onClick={() =>
-                                                    setIsExpanded(!isExpanded)
-                                                  }
-                                                  className={`mt-1 text-xs ${isDark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"} underline focus:outline-none`}
-                                                >
-                                                  {isExpanded
-                                                    ? "Show less"
-                                                    : "Show more"}
-                                                </button>
-                                              </div>
-                                            ) : (
-                                              <div className="break-words whitespace-pre-wrap leading-relaxed">
-                                                {cellContent}
-                                              </div>
-                                            )}
+                                          <div className="truncate">
+                                            {cellContent}
                                           </div>
                                         </td>
                                       );
@@ -667,15 +633,6 @@ const CsvImportModal = ({
                             </tbody>
                           </table>
                         </div>
-
-                        {/* Table Footer with Scroll Indicator */}
-                        {(enrichedData || csvData).headers.length > 3 && (
-                          <div
-                            className={`mt-2 text-xs text-center ${isDark ? "text-gray-500" : "text-gray-400"}`}
-                          >
-                            ← Scroll horizontally to view all columns →
-                          </div>
-                        )}
                       </div>
                     </CardContent>
                   </Card>
