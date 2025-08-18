@@ -87,17 +87,54 @@ export default function EnrichPersonInfo() {
 
     setLoading((prev) => ({ ...prev, [type]: true }));
 
-    // Simulate API call
-    setTimeout(() => {
-      const result = mockResults[type as keyof typeof mockResults];
-      setResults((prev) => ({ ...prev, [type]: result }));
+    try {
+      if (type === "email") {
+        // Call the new API endpoint for person work email
+        const response = await fetch(
+          "http://localhost:8000/api/person-work-email-WITH-PROSPEO-HUNTER",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        setResults((prev) => ({
+          ...prev,
+          [type]: {
+            type: "email" as const,
+            result: result.email || "No email found",
+            status: result.status || ("success" as const),
+            source: result.source || "API",
+          },
+        }));
+      } else {
+        // For other types, use mock data for now
+        const result = mockResults[type as keyof typeof mockResults];
+        setResults((prev) => ({ ...prev, [type]: result }));
+      }
+
       setLoading((prev) => ({ ...prev, [type]: false }));
 
       toast({
         title: "Success",
         description: `${getTypeLabel(type)} found successfully`,
       });
-    }, 2000);
+    } catch (error) {
+      setLoading((prev) => ({ ...prev, [type]: false }));
+      toast({
+        title: "Error",
+        description: `Failed to fetch ${getTypeLabel(type)}`,
+        variant: "destructive",
+      });
+    }
   };
 
   const validateForm = (type: string, formData: any) => {
