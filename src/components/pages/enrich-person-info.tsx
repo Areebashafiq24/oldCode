@@ -91,7 +91,7 @@ export default function EnrichPersonInfo() {
       if (type === "email") {
         // Call the new API endpoint for person work email
         const response = await fetch(
-          "http://localhost:8000/api/person-work-email-WITH-PROSPEO-HUNTER",
+          "http://localhost:8000/api/person-work-email",
           {
             method: "POST",
             headers: {
